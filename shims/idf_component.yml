@@ -1,0 +1,10 @@
+# Copyright 2025 Morse Micro
+# SPDX-License-Identifier: Apache-2.0
+
+dependencies:
+    idf: ">=5.1.1"
+    mmutils: "==2.7.2-esp32"
+description: Morse Micro shim layers for the esp32s3
+targets:
+    - esp32s3
+version: "2.7.2-esp32"

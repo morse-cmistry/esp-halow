@@ -1,0 +1,77 @@
+# Copyright 2024 Morse Micro
+# SPDX-License-Identifier: Apache-2.0
+menu "Morse Micro Shim Configuration"
+    config MM_RESET_N
+        int "RESET_N pin for MM chip"
+        default 3
+        help
+            Output gpio pin used to control the RESET_N line.
+
+    config MM_WAKE
+        int "WAKE pin for MM chip"
+        default 8
+        help
+            Output gpio pin used to control the WAKE line.
+
+    config MM_BUSY
+        int "BUSY pin for the MM chip"
+        default 9
+        help
+            Input pin used as a rising edge interrupt.
+
+    config MM_SPI_SCK
+        int "SCK pin for MM chip"
+        default 12
+        help
+            SPI clock pin.
+
+    config MM_SPI_MOSI
+        int "MOSI pin for MM chip"
+        default 11
+        help
+            SPI master out slave in pin.
+
+    config MM_SPI_MISO
+        int "MISO pin for MM chip"
+        default 13
+        help
+            SPI master in slave out pin.
+
+    config MM_SPI_CS
+        int "SPI CS pin for MM chip"
+        default 10
+        help
+            SPI chip select pin.
+
+    config MM_SPI_IRQ
+        int "SPI IRQ pin for MM chip"
+        default 5
+        help
+            Out of band interupt pin used to indicate that
+            the MM chip has data for the host.
+
+    config MM_BCF
+        string "BCF to link when building the FW"
+        default "mf08651_us"
+        help
+            The Board Configuration File (BCF) is a configuration file for the Morse Micro chip that provides
+            board-specific information and is required for the system to function properly. BCFs for Morse Micro
+            modules are included in the MM-IoT-SDK package. These modules can be identified by the part numbers
+            printed on their labels, which take the form MM6108-MFxxxxxx.
+    config MMOSAL_TASK_PRI_IDLE
+        int "Priority level for IDLE threads started by the Morse Micro libraries"
+        default 0
+    config MMOSAL_TASK_PRI_MIN
+        int "Priority level for MIN threads started by the Morse Micro libraries"
+        default 1
+    config MMOSAL_TASK_PRI_LOW
+        int "Priority level for LOW threads started by the Morse Micro libraries"
+        default 2
+    config MMOSAL_TASK_PRI_NORM
+        int "Priority level for NORM threads started by the Morse Micro libraries"
+        default 3
+    config MMOSAL_TASK_PRI_HIGH
+        int "Priority level for HIGH threads started by the Morse Micro libraries"
+        default 4
+
+endmenu
