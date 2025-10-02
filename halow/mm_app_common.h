@@ -56,3 +56,5 @@ void app_wlan_start(void);
  * Disconnects from Wi-Fi and de-initializes the WLAN interface.
  */
 void app_wlan_stop(void);
+
+int mm_test(void);

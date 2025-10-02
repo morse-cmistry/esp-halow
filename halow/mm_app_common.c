@@ -192,3 +192,7 @@ void app_wlan_stop(void)
     /* Shutdown wlan interface */
     mmwlan_shutdown();
 }
+
+int mm_test(void){
+	return 5000;
+}
