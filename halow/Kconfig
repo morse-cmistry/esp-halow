@@ -2,11 +2,11 @@ menu "Wi-Fi HaLow Connection Manager"
 
     config HALOW_COUNTRY_CODE
         string "Country code to use for Wi-Fi HaLow"
-        default "??"
+        default "AU"
 
     config HALOW_SSID
         string "SSID for the Wi-Fi HaLow station"
-        default "MorseMicro"
+        default "halowlink1-47d3"
 
     config HALOW_PASSWORD
         string "Password for the Wi-Fi HaLow station"

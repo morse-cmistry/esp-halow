@@ -22,8 +22,8 @@ set(BCF_MBIN "${CMAKE_CURRENT_LIST_DIR}/../firmware/bcf_${CONFIG_MM_BCF}.mbin")
 set(BCF_OBJ "${BCF_MBIN}.o")
 
 # Define the architecture and other variables
-set(BFDNAME "elf32-xtensa-le")
-set(ARCH "xtensa")
+set(BFDNAME "elf32-littleriscv")
+set(ARCH "riscv")
 
 function(make_binary_object __file __prefix)
     get_filename_component(__file_name ${__file} NAME)

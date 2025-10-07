@@ -24,6 +24,25 @@ static const char *TAG = "app_common";
 #define DNS_MAX_SERVERS 2
 #endif
 
+/* Default SSID  */
+#ifndef SSID
+/** SSID of the AP to connect to. (Do not quote; it will be stringified.) */
+#define SSID CONFIG_HALOW_SSID
+#endif
+
+/* Default passphrase  */
+#ifndef SAE_PASSPHRASE
+/** Passphrase of the AP (ignored if security type is not SAE).
+ *  (Do not quote; it will be stringified.) */
+#define SAE_PASSPHRASE CONFIG_HALOW_PASSWORD
+#endif
+
+/* Default security type  */
+#ifndef SECURITY_TYPE
+/** Security type (@see mmwlan_security_type). */
+#define SECURITY_TYPE MMWLAN_SAE
+#endif
+
 /** Binary semaphore used to start user_main() once the link comes up. */
 static struct mmosal_semb *link_established = NULL;
 
@@ -90,24 +109,6 @@ void app_print_version_info(void)
     MMOSAL_ASSERT(status == MMWLAN_SUCCESS);
 }
 
-void app_wlan_init(void)
-{
-    /* Ensure we don't call twice */
-    MMOSAL_ASSERT(link_established == NULL);
-    link_established = mmosal_semb_create("link_established");
-
-    /* Initialize Morse subsystems, note that they must be called in this order. */
-    mmhal_init();
-    mmwlan_init();
-
-    mmwlan_set_channel_list(load_channel_list());
-
-    /* Boot the WLAN interface so that we can retrieve the firmware version. */
-    struct mmwlan_boot_args boot_args = MMWLAN_BOOT_ARGS_INIT;
-    (void)mmwlan_boot(&boot_args);
-    app_print_version_info();
-}
-
 static void wifi_start(void *esp_netif)
 {
     uint8_t mac[6];
@@ -141,9 +142,23 @@ static void wifi_start(void *esp_netif)
     esp_netif_action_start(esp_netif, NULL, 0, NULL);
 }
 
-
-void app_wlan_start(void)
+void mm_halow_init()
 {
+    /* Ensure we don't call twice */
+    MMOSAL_ASSERT(link_established == NULL);
+    link_established = mmosal_semb_create("link_established");
+
+    /* Initialize Morse subsystems, note that they must be called in this order. */
+    mmhal_init();
+    mmwlan_init();
+
+    mmwlan_set_channel_list(load_channel_list());
+
+    /* Boot the WLAN interface so that we can retrieve the firmware version. */
+    struct mmwlan_boot_args boot_args = MMWLAN_BOOT_ARGS_INIT;
+    (void)mmwlan_boot(&boot_args);
+    app_print_version_info();
+
     enum mmwlan_status status;
 
     esp_netif_config_t cfg = ESP_NETIF_DEFAULT_WIFI_STA();
@@ -159,40 +174,57 @@ void app_wlan_start(void)
     status = mmwlan_register_link_state_cb(halow_link_state, netif);
     MMOSAL_ASSERT(status == MMWLAN_SUCCESS);
 
-
-    /* Load Wi-Fi settings from config store */
-    struct mmwlan_sta_args sta_args = MMWLAN_STA_ARGS_INIT;
-    load_mmwlan_sta_args(&sta_args);
-    load_mmwlan_settings();
-
-    printf("Attempting to connect to %s ", sta_args.ssid);
-    if (sta_args.security_type == MMWLAN_SAE)
-    {
-        printf("with passphrase %s", sta_args.passphrase);
-    }
-    printf("\n");
-    printf("This may take some time (~30 seconds)\n");
-
-    status = mmwlan_sta_enable(&sta_args, sta_status_callback);
-    MMOSAL_ASSERT(status == MMWLAN_SUCCESS);
-
-    // TODO: we should have booted the chip already.
     wifi_start(netif);
-
-    /* Wait for link status callback.
-     * Use a binary semaphore to block us until Link is up.
-    //  */
-    // mmosal_semb_wait(link_established, UINT32_MAX);
-
-    /* Wi-Fi link is now established, return to caller */
 }
 
-void app_wlan_stop(void)
+void scan_rx_cb(const struct mmwlan_scan_result *result, void *arg){
+	return;
+}
+void scan_complete_cb(enum mmwlan_scan_state scan_state, void *arg){
+	return;
+}
+
+int mm_halow_scan(void){
+	struct mmwlan_scan_req scan_req	= MMWLAN_SCAN_REQ_INIT;
+	scan_req.scan_rx_cb = scan_rx_cb;
+	scan_req.scan_complete_cb = scan_complete_cb;
+	int ret = mmwlan_scan_request(&scan_req);
+	return ret;
+}
+
+void mm_halow_stop(void)
 {
     /* Shutdown wlan interface */
     mmwlan_shutdown();
 }
 
-int mm_test(void){
-	return 5000;
+void mm_halow_connect(const char* ssid, const char* pass){
+
+    enum mmwlan_status status;
+
+    struct mmwlan_sta_args sta_args = MMWLAN_STA_ARGS_INIT;
+	//load_mmwlan_sta_args(&sta_args);
+    //load_mmwlan_settings();
+
+    (void)mmosal_safer_strcpy((char *)sta_args.ssid, SSID, sizeof(sta_args.ssid));
+    sta_args.ssid_len = strlen((char *)sta_args.ssid);
+
+    (void)mmosal_safer_strcpy(sta_args.passphrase, SAE_PASSPHRASE,
+                              sizeof(sta_args.passphrase));
+    sta_args.passphrase_len = strlen(sta_args.passphrase);
+
+    sta_args.security_type = SECURITY_TYPE;
+
+    status = mmwlan_sta_enable(&sta_args, sta_status_callback);
+    MMOSAL_ASSERT(status == MMWLAN_SUCCESS);
+
+    mmwlan_set_power_save_mode(MMWLAN_PS_DISABLED);
+}
+
+void mm_halow_disconnect(){
+	mmwlan_sta_disable();
+}
+
+int mm_halow_status(){
+	return mmwlan_get_sta_state();
 }

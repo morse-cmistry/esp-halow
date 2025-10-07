@@ -43,7 +43,7 @@ static void halow_free(void *h, void* buffer)
 // esp_err_t esp_netif_receive(esp_netif_t *esp_netif, void *buffer, size_t len, void *eb)
 void halow_rx(struct mmpkt *rxpkt, void *arg)
 {
-    // ESP_LOGI(TAG, "RX data %lu\n", rxpkt);
+    ESP_LOGI(TAG, "RX data %lu\n", (long unsigned)rxpkt);
     esp_netif_t *esp_netif = (esp_netif_t *)arg;
     assert(esp_netif);
 

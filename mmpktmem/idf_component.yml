@@ -7,4 +7,6 @@ dependencies:
 description: Morse Micro Packet Memory
 targets:
     - esp32s3
-version: "2.7.2-esp32"
+    - esp32c6
+    - esp32c3
+version: "2.9.7-esp32"

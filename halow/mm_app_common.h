@@ -43,18 +43,22 @@
  *
  * @warning This must be called only once.
  */
-void app_wlan_init(void);
+void mm_halow_init();
 
 /**
  * Starts the WLAN interface and connects to Wi-Fi using settings specified in the config store.
  *
  * If no settings are found, the defaults are used.
  */
-void app_wlan_start(void);
+void mm_halow_start(void);
 
 /**
  * Disconnects from Wi-Fi and de-initializes the WLAN interface.
  */
-void app_wlan_stop(void);
+void mm_halow_stop(void);
 
-int mm_test(void);
+int mm_halow_scan(void);
+
+void mm_halow_connect(const char* ssid, const char* pass);
+void mm_halow_disconnect();
+int mm_halow_status();
