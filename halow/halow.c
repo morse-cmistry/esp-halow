@@ -23,7 +23,6 @@ void halow_link_state(enum mmwlan_link_state link_state, void *arg)
     else
     {
         ESP_LOGI(TAG, "Link up\n");
-        // esp_netif_action_connected(s_wifi_netifs[WIFI_IF_STA], base, event_id, data);
         esp_netif_action_connected(esp_netif, NULL, 0, NULL);
     }
 }
@@ -34,32 +33,15 @@ static void halow_free(void *h, void* buffer)
     struct mmpkt *rxpkt = mmpkt_from_view(pktview);
     mmpkt_close(&pktview);
     mmpkt_release(rxpkt);
-    // if (buffer)
-    // {
-    //     mmosal_free(buffer);
-    // }
 }
 
-// esp_err_t esp_netif_receive(esp_netif_t *esp_netif, void *buffer, size_t len, void *eb)
 void halow_rx(struct mmpkt *rxpkt, void *arg)
 {
-    ESP_LOGI(TAG, "RX data %lu\n", (long unsigned)rxpkt);
     esp_netif_t *esp_netif = (esp_netif_t *)arg;
     assert(esp_netif);
 
     struct mmpktview *pktview = mmpkt_open(rxpkt);
     uint32_t data_len = mmpkt_get_data_length(pktview);
-    ESP_LOGI(TAG, "RX data %lu\n", data_len);
-
-    // TODO investigate if we can do zero copy, it does not appear so at first glance. Make a
-    // comment explaining this. Look into esp_wifi_internal_reg_netstack_buf_cb
-    // void *buf_copy = mmosal_malloc(data_len);
-    // if (!buf_copy) {
-    //     goto exit;
-    // }
-    // memcpy(buf_copy, mmpkt_get_data_start(pktview), data_len);
-    // todo handle failed case
-    // Confusingly the *eb (last) param appear to be the buffer ref returned in halow_free
     esp_err_t ret = esp_netif_receive(halow_netif, mmpkt_get_data_start(pktview), data_len, pktview);
 
     if (ret != ESP_OK)
@@ -74,12 +56,6 @@ void halow_rx(struct mmpkt *rxpkt, void *arg)
     }
 }
 
-
-// static esp_err_t wifi_transmit(void *h, void *buffer, size_t len)
-// {
-//     wifi_netif_driver_t driver = h;
-//     return esp_wifi_internal_tx(driver->wifi_if, buffer, len);
-// }
 static esp_err_t halow_transmit(void *h, void *buffer, size_t len)
 {
     halow_netif_driver_t *driver = (halow_netif_driver_t *)h;
@@ -88,7 +64,6 @@ static esp_err_t halow_transmit(void *h, void *buffer, size_t len)
     struct mmpktview *pktview;
     enum mmwlan_status status;
     struct mmwlan_tx_metadata metadata = {
-        // .tid = get_netif_state(netif)->tx_qos_tid,
         .tid = 0,
     };
 
@@ -125,8 +100,6 @@ static esp_err_t halow_transmit_wrap(void *h, void *buffer, size_t len, void *ne
     return halow_transmit(h, buffer, len);
 }
 
-
-
 static esp_err_t halow_driver_start(esp_netif_t * esp_netif, void * args)
 {
     halow_netif_driver_t *driver = (halow_netif_driver_t *)args;
@@ -140,7 +113,6 @@ static esp_err_t halow_driver_start(esp_netif_t * esp_netif, void * args)
     halow_netif = esp_netif;
     return esp_netif_set_driver_config(esp_netif, &driver_ifconfig);
 }
-
 
 halow_netif_driver_t *esp_halow_create_if_driver(void)
 {

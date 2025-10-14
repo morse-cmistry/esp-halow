@@ -57,8 +57,22 @@ void mm_halow_start(void);
  */
 void mm_halow_stop(void);
 
+/**
+ * Scans for APs
+ */
 int mm_halow_scan(void);
 
+/**
+ * Connect to an AP
+ */
 void mm_halow_connect(const char* ssid, const char* pass);
+
+/**
+ * Disconnect from an AP
+ */
 void mm_halow_disconnect();
+
+/**
+ * Get the STA State
+ */
 int mm_halow_status();

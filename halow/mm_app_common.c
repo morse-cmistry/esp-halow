@@ -112,33 +112,13 @@ void app_print_version_info(void)
 static void wifi_start(void *esp_netif)
 {
     uint8_t mac[6];
-    esp_err_t ret;
 
     ESP_LOGD(TAG, "%s esp-netif:%p " PRId32 "", __func__, esp_netif);
 
-    // wifi_netif_driver_t driver = esp_netif_get_io_driver(esp_netif);
-
     mmwlan_get_mac_addr(mac);
-    // if ((ret = esp_wifi_get_if_mac(driver, mac)) != ESP_OK) {
-    //     ESP_LOGE(TAG, "esp_wifi_get_mac failed with %d", ret);
-    //     return;
-    // }
     ESP_LOGD(TAG, "WIFI mac address: %x %x %x %x %x %x", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 
-    // if (esp_wifi_is_if_ready_when_started(driver)) {
-    //     if ((ret = esp_wifi_register_if_rxcb(driver,  esp_netif_receive, esp_netif)) != ESP_OK) {
-    //         ESP_LOGE(TAG, "esp_wifi_register_if_rxcb for if=%p failed with %d", driver, ret);
-    //         return;
-    //     }
-    // }
-
-    // TODO: I'm guessing this is for zero copy tx??
-    // if ((ret = esp_wifi_internal_reg_netstack_buf_cb(esp_netif_netstack_buf_ref, esp_netif_netstack_buf_free)) != ESP_OK) {
-    //     ESP_LOGE(TAG, "netstack cb reg failed with %d", ret);
-    //     return;
-    // }
     esp_netif_set_mac(esp_netif, mac);
-    // esp_netif_action_start(esp_netif, base, event_id, data);
     esp_netif_action_start(esp_netif, NULL, 0, NULL);
 }
 
@@ -178,6 +158,7 @@ void mm_halow_init()
 }
 
 void scan_rx_cb(const struct mmwlan_scan_result *result, void *arg){
+	printf("SSID: %s", result->ssid);
 	return;
 }
 void scan_complete_cb(enum mmwlan_scan_state scan_state, void *arg){
@@ -203,14 +184,12 @@ void mm_halow_connect(const char* ssid, const char* pass){
     enum mmwlan_status status;
 
     struct mmwlan_sta_args sta_args = MMWLAN_STA_ARGS_INIT;
-	//load_mmwlan_sta_args(&sta_args);
-    //load_mmwlan_settings();
 
-    (void)mmosal_safer_strcpy((char *)sta_args.ssid, SSID, sizeof(sta_args.ssid));
+    (void)mmosal_safer_strcpy((char *)sta_args.ssid, ssid, MMWLAN_SSID_MAXLEN-1);
     sta_args.ssid_len = strlen((char *)sta_args.ssid);
 
-    (void)mmosal_safer_strcpy(sta_args.passphrase, SAE_PASSPHRASE,
-                              sizeof(sta_args.passphrase));
+    (void)mmosal_safer_strcpy(sta_args.passphrase, pass,
+                              MMWLAN_PASSPHRASE_MAXLEN);
     sta_args.passphrase_len = strlen(sta_args.passphrase);
 
     sta_args.security_type = SECURITY_TYPE;
