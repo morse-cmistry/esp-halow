@@ -17,6 +17,11 @@
 #include "mm_app_loadconfig.h"
 #include "halow.h"
 
+#include "mmhal.h"
+#include "mmosal.h"
+#include "mmwlan.h"
+#include "mm_app_regdb.h"
+
 static const char *TAG = "app_common";
 
 /** Maximum number of DNS servers to attempt to retrieve from config store. */
@@ -41,6 +46,26 @@ static const char *TAG = "app_common";
 #ifndef SECURITY_TYPE
 /** Security type (@see mmwlan_security_type). */
 #define SECURITY_TYPE MMWLAN_SAE
+#endif
+
+/** Length of string representation of a MAC address (i.e., "XX:XX:XX:XX:XX:XX")
+ * including null terminator. */
+#define MAC_ADDR_STR_LEN    (18)
+
+/*
+ * If ASNI_ESCAPE_ENABLED is non-zero (the default) then ANSI escape characters will be used to
+ *  format the log output.
+ */
+#if !(defined(ASNI_ESCAPE_ENABLED) && ASNI_ESCAPE_ENABLED == 0)
+/** ANSI escape sequence for bold text. */
+#define ANSI_BOLD  "\x1b[1m"
+/** ANSI escape sequence to reset font. */
+#define ANSI_RESET "\x1b[0m"
+#else
+/** ANSI escape sequence for bold text (disabled so no-op). */
+#define ANSI_BOLD  ""
+/** ANSI escape sequence to reset font (disabled so no-op). */
+#define ANSI_RESET ""
 #endif
 
 /** Binary semaphore used to start user_main() once the link comes up. */
@@ -138,6 +163,7 @@ void mm_halow_init()
     struct mmwlan_boot_args boot_args = MMWLAN_BOOT_ARGS_INIT;
     (void)mmwlan_boot(&boot_args);
     app_print_version_info();
+    mmwlan_set_power_save_mode(MMWLAN_PS_DISABLED);
 
     enum mmwlan_status status;
 
@@ -158,7 +184,44 @@ void mm_halow_init()
 }
 
 void scan_rx_cb(const struct mmwlan_scan_result *result, void *arg){
-	printf("SSID: %s", result->ssid);
+    (void)(arg);
+    char bssid_str[MAC_ADDR_STR_LEN];
+    char ssid_str[MMWLAN_SSID_MAXLEN];
+    int ret;
+    static int num_scan_results;
+	num_scan_results++;
+
+    snprintf(bssid_str, MAC_ADDR_STR_LEN, "%02x:%02x:%02x:%02x:%02x:%02x",
+             result->bssid[0], result->bssid[1], result->bssid[2], result->bssid[3],
+             result->bssid[4], result->bssid[5]);
+    snprintf(ssid_str, (result->ssid_len+1), "%s", result->ssid);
+
+    printf(ANSI_BOLD "%2d. %s" ANSI_RESET "\n", num_scan_results, ssid_str);
+    printf("    Operating BW: %u MHz\n",  result->op_bw_mhz);
+    printf("    BSSID: %s\n", bssid_str);
+    printf("    RSSI: %3d\n", result->rssi);
+    printf("    Beacon Interval(TUs): %u\n", result->beacon_interval);
+    printf("    Capability Info: 0x%04x\n", result->capability_info);
+
+    //ret = parse_rsn_information(result->ies, result->ies_len, &rsn_info);
+    //if (ret < 0)
+    //{
+    //    printf("    Invalid probe response\n");
+    //}
+    //else if (rsn_info.num_akm_suites == 0)
+    //{
+    //    printf("    Security: None\n");
+    //}
+    //else if (ret > 0)
+    //{
+    //    unsigned ii;
+    //    printf("    Security:");
+    //    for (ii = 0; ii < rsn_info.num_akm_suites; ii++)
+    //    {
+    //        printf(" %s", akm_suite_to_string(rsn_info.akm_suites[ii]));
+    //    }
+    //    printf("\n");
+    //}
 	return;
 }
 void scan_complete_cb(enum mmwlan_scan_state scan_state, void *arg){
@@ -169,7 +232,9 @@ int mm_halow_scan(void){
 	struct mmwlan_scan_req scan_req	= MMWLAN_SCAN_REQ_INIT;
 	scan_req.scan_rx_cb = scan_rx_cb;
 	scan_req.scan_complete_cb = scan_complete_cb;
+	printf("Scan Request init\n");
 	int ret = mmwlan_scan_request(&scan_req);
+	printf("Scan Request done\n");
 	return ret;
 }
 
@@ -196,8 +261,6 @@ void mm_halow_connect(const char* ssid, const char* pass){
 
     status = mmwlan_sta_enable(&sta_args, sta_status_callback);
     MMOSAL_ASSERT(status == MMWLAN_SUCCESS);
-
-    mmwlan_set_power_save_mode(MMWLAN_PS_DISABLED);
 }
 
 void mm_halow_disconnect(){
