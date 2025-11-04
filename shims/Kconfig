@@ -1,4 +1,4 @@
-# Copyright 2024 Morse Micro
+# Copyright 2024-2025 Morse Micro
 # SPDX-License-Identifier: Apache-2.0
 menu "Morse Micro Shim Configuration"
     config MM_RESET_N
@@ -50,28 +50,35 @@ menu "Morse Micro Shim Configuration"
             Out of band interupt pin used to indicate that
             the MM chip has data for the host.
 
-    config MM_BCF
-        string "BCF to link when building the FW"
-        default "fgh100mhaamd"
+    config MM_BCF_FILE
+        string "MM Board Configuration File"
+        default "bcf_fgh100mhaamd.mbin"
         help
-            The Board Configuration File (BCF) is a configuration file for the Morse Micro chip that provides
-            board-specific information and is required for the system to function properly. BCFs for Morse Micro
-            modules are included in the MM-IoT-SDK package. These modules can be identified by the part numbers
-            printed on their labels, which take the form MM6108-MFxxxxxx.
-    config MMOSAL_TASK_PRI_IDLE
-        int "Priority level for IDLE threads started by the Morse Micro libraries"
-        default 0
-    config MMOSAL_TASK_PRI_MIN
-        int "Priority level for MIN threads started by the Morse Micro libraries"
-        default 1
-    config MMOSAL_TASK_PRI_LOW
-        int "Priority level for LOW threads started by the Morse Micro libraries"
-        default 2
-    config MMOSAL_TASK_PRI_NORM
-        int "Priority level for NORM threads started by the Morse Micro libraries"
-        default 3
-    config MMOSAL_TASK_PRI_HIGH
-        int "Priority level for HIGH threads started by the Morse Micro libraries"
-        default 4
+            Set the name of the BCF (Board Configuration File) to use.
+            Example valid filenames include:
+              - bcf_mf08651_us.mbin
+              - bcf_mf08551.mbin
+              - bcf_mf08251.mbin
+              - bcf_mf03120.mbin
+
+            This file provides board-specific configuration data for the Morse Micro chip/module.
+
+            The build system will search for the specified file in the following locations:
+              1. firmware/ in the root of the application being built
+
+            If the file is not found in either location, a warning will be reported during
+            configuration.
+
+    config MM_FW_FILE
+        string "MM Firmware File"
+        default "mm6108.mbin"
+        help
+            This is the firmware file for the Morse Micro chip/module.
+
+            The build system will search for the specified file in the following locations:
+              1. firmware/ in the root of the application being built
+
+            If the file is not found in either location, a warning will be reported during
+            configuration.
 
 endmenu

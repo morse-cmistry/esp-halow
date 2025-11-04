@@ -36,16 +36,16 @@
 #define ntohl(x) be32toh(x)
 #endif
 
-#define INET_ADDRSTRLEN   16
-#define INET6_ADDRSTRLEN  46
+#define INET_ADDRSTRLEN 16
+#define INET6_ADDRSTRLEN 46
 
 /* Protocol families.  */
-#define PF_INET   2   /* IP protocol family. */
-#define PF_INET6  10  /* IP version 6. */
+#define PF_INET 2   /* IP protocol family. */
+#define PF_INET6 10 /* IP version 6. */
 
 /* Address families. */
-#define AF_INET   PF_INET
-#define AF_INET6  PF_INET6
+#define AF_INET PF_INET
+#define AF_INET6 PF_INET6
 
 /*
  * ----
@@ -59,29 +59,28 @@ typedef unsigned short __u16;
 typedef signed int __s32;
 typedef unsigned int __u32;
 
-struct in_addr
-{
+struct in_addr {
     __u32 s_addr;
 };
 
-struct in6_addr
-{
+struct in6_addr {
     union {
         __u32 u32_addr[4];
         __u8 u8_addr[16];
     } un;
-#define s6_addr  un.u8_addr
+#define s6_addr un.u8_addr
 };
 
 /* Stub function declaration for inet_ntop which is called from write_ipv4_info
  * function in robust_av.c. Since they are not used we will create a dummy
  * function declarion here.
  */
-const char *inet_ntop (int __af, const void *__cp, char *__buf, int __len);
+const char *inet_ntop(int __af, const void *__cp, char *__buf, int __len);
 
-#if !defined(ENABLE_HOSTAP_CRYPTO_API_MANGLING) || ENABLE_HOSTAP_CRYPTO_API_MANGLING
-/* Rename crypto functions to match symbol name mangling in morselib for avoidance of namespace
- * collisions. */
+#if !defined(ENABLE_HOSTAP_CRYPTO_API_MANGLING) ||                             \
+    ENABLE_HOSTAP_CRYPTO_API_MANGLING
+/* Rename crypto functions to match symbol name mangling in morselib for
+ * avoidance of namespace collisions. */
 #define aes_decrypt mmint_aes_decrypt
 #define aes_decrypt_deinit mmint_aes_decrypt_deinit
 #define aes_decrypt_init mmint_aes_decrypt_init

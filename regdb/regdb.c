@@ -1,6 +1,6 @@
 /*
  *
- * Copyright 2022-2024 Morse Micro
+ * Copyright 2022-2025 Morse Micro
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -31,7 +31,11 @@
  * | US | USA |
  */
 
-#include "mm_app_regdb.h"
+#include "regdb.h"
+
+#ifndef COUNTRY_CODE
+#define COUNTRY_CODE CONFIG_HALOW_COUNTRY_CODE
+#endif
 
 /** List of valid S1G channels for Australia. */
 const struct mmwlan_s1g_channel s1g_channels_AU[] = {
@@ -355,5 +359,22 @@ const struct mmwlan_regulatory_db *get_regulatory_db(void)
 {
     return &regulatory_db;
 }
+
+const struct mmwlan_s1g_channel_list *load_channel_list(void)
+{
+    char strval[16];
+    const struct mmwlan_s1g_channel_list *channel_list;
+
+    (void)mmosal_safer_strcpy(strval, COUNTRY_CODE, sizeof(strval));
+    channel_list = mmwlan_lookup_regulatory_domain(get_regulatory_db(), strval);
+    if (channel_list == NULL)
+    {
+        printf("Could not find specified regulatory domain matching country code %s\n", strval);
+        printf("Please set the configuration key wlan.country_code to the correct country code.\n");
+        MMOSAL_ASSERT(false);
+    }
+    return channel_list;
+}
+
 
 /** \} */

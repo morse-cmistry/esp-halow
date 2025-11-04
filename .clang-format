@@ -1,0 +1,99 @@
+---
+# All options can be found in https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+Language: Cpp
+BasedOnStyle: LLVM
+
+# Indentation
+IndentWidth: 4
+TabWidth: 4
+IndentPPDirectives: None
+UseTab: Never
+IndentExternBlock: NoIndent
+
+# Braces
+BreakBeforeBraces: Allman
+
+# Line Length
+ColumnLimit: 100
+
+# Spacing
+SpaceBeforeParens: ControlStatements
+SpacesInParentheses: false
+SpaceInEmptyParentheses: false
+SpacesInSquareBrackets: false
+SpaceBeforeAssignmentOperators: true
+SpacesInAngles: false
+SpaceAfterCStyleCast: false
+SpaceAfterLogicalNot: false
+SpaceBeforeCaseColon: false
+SpaceInEmptyBlock: false
+SpacesBeforeTrailingComments: 1
+SpaceAroundPointerQualifiers: After
+SpacesInContainerLiterals: false
+Cpp11BracedListStyle: false
+PointerAlignment: Right
+
+# Includes
+SortIncludes: false
+
+# Functions and Prototypes
+AlignAfterOpenBracket: Align
+AlignArrayOfStructures: None
+AlignConsecutiveAssignments: None
+AlignConsecutiveDeclarations: None
+AlignConsecutiveBitFields: AcrossEmptyLines
+AlignConsecutiveMacros: AcrossEmptyLines
+AlignConsecutiveShortCaseStatements:
+  Enabled: false
+AlignEscapedNewlines: Left
+AlignOperands: Align
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortBlocksOnASingleLine: Empty
+AllowShortCaseExpressionOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: true
+AlwaysBreakAfterDefinitionReturnType: None
+BreakAfterAttributes: Never
+AlwaysBreakBeforeMultilineStrings: false
+BreakBeforeBinaryOperators: None
+BreakBeforeInlineASMColon: Always
+BreakBeforeTernaryOperators: false
+BreakStringLiterals: true
+IndentGotoLabels: false
+InsertNewlineAtEOF: true
+ReferenceAlignment: Pointer
+BinPackArguments: false
+BinPackParameters: OnePerLine
+PenaltyBreakOpenParenthesis: 9
+PenaltyBreakBeforeFirstCallParameter: 9
+PenaltyBreakAssignment: 10
+PenaltyReturnTypeOnItsOwnLine: 1000
+
+IndentWrappedFunctionNames: false
+
+# Comments
+ReflowComments: Always
+AlignTrailingComments: Never
+
+# Binary operations
+BreakBinaryOperations: RespectPrecedence
+
+# Miscellaneous
+MaxEmptyLinesToKeep: 1
+KeepEmptyLinesAtTheStartOfBlocks: false
+RemoveEmptyLinesInUnwrappedLines: true
+BitFieldColonSpacing: Both
+SeparateDefinitionBlocks: Always
+SkipMacroDefinitionBody: false
+IndentCaseLabels: true
+
+# Options that the documentation warns about changing code behaviour
+RemoveParentheses: Leave # 'Leave' won't lead to incorrect code
+RemoveSemicolon: false  # 'false' won't lead to incorrect code
+QualifierAlignment: Leave # 'Leave' won't lead to incorrect code
+InsertBraces: true # 'true' might lead to incorrect code, but is mandatory in this repo
+...

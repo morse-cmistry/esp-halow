@@ -1,0 +1,14 @@
+menu "Wi-Fi HaLow Connection Manager"
+
+    config HALOW_COUNTRY_CODE
+        string "Country code to use for Wi-Fi HaLow"
+        default "??"
+
+	config HALOW_PS_MODE
+		bool "Enable Halow Powersave Mode"
+		default false
+		help
+			This can only be set to true for devices which have the BUSY and WAKE
+			pins connected.
+
+endmenu

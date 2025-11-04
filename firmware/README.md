@@ -2,7 +2,7 @@
 
 ## Description
 
-This component contains Morse Micro chip firmware binaries and board configuration files containing chip calibration
+This component contains Morse Micro chip firmware binaries and board configuration files containing chip configuration
 data, in the formats required for MM-IoT-SDK.
 
 # License

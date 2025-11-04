@@ -1,0 +1,6 @@
+dependencies:
+  morsemicro/mmutils: "==2.9.7-esp32"
+  morsemicro/morselib: "==2.9.7-esp32"
+  morsemicro/regdb: "==2.9.7-esp32"
+  morsemicro/shims: "==2.9.7-esp32"
+version: "0.1.0"

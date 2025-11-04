@@ -28,4 +28,12 @@
  */
 const struct mmwlan_regulatory_db *get_regulatory_db(void);
 
+/**
+ * Looks up country code and returns appropriate channel list.
+ *
+ * @returns A pointer to the channel list to load.
+ */
+const struct mmwlan_s1g_channel_list *load_channel_list(void);
+
+
 /** \@} */

@@ -4,5 +4,5 @@
 dependencies:
     idf:
         version: ">=5.1.1"
-description: Morse Micro Packet Memory
+description: Morse Micro Regdb
 version: "2.9.7-esp32"
