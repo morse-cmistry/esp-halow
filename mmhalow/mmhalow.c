@@ -11,12 +11,6 @@
 
 static const char *TAG = "Morse Micro HaLow NetIF";
 
-/* Default security type  */
-#ifndef SECURITY_TYPE
-/** Security type (@see mmwlan_security_type). */
-#define SECURITY_TYPE MMWLAN_SAE
-#endif
-
 static esp_netif_t *halow_netif = NULL;
 
 static void mmhalow_link_state(enum mmwlan_link_state link_state, void *arg)
@@ -242,6 +236,8 @@ esp_err_t mmhalow_scan(struct mmhalow_scan_args *args)
 static void set_config_sta(wifi_sta_config_t *conf)
 {
     mmhalow_netif_driver_t *morse_drv = esp_netif_get_io_driver(halow_netif);
+    int security_type = MMWLAN_SAE; /* Default to SAE security */
+
     MMOSAL_ASSERT(morse_drv);
 
     (void)mmosal_safer_strcpy((char *)morse_drv->sta_args.ssid,
@@ -253,7 +249,18 @@ static void set_config_sta(wifi_sta_config_t *conf)
                               (char *)conf->password,
                               MMWLAN_PASSPHRASE_MAXLEN - 1);
     morse_drv->sta_args.passphrase_len = strlen(morse_drv->sta_args.passphrase);
-    morse_drv->sta_args.security_type = SECURITY_TYPE;
+
+    /* If no passphrase is provided assume open connection */
+    if (morse_drv->sta_args.passphrase_len == 0)
+    {
+        security_type = MMWLAN_OPEN;
+    }
+    else if (conf->owe_enabled)
+    {
+        security_type = MMWLAN_OWE;
+    }
+
+    morse_drv->sta_args.security_type = security_type;
 }
 
 esp_err_t mmhalow_set_config(wifi_interface_t interface, wifi_config_t *conf)
