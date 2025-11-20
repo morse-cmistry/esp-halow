@@ -5,7 +5,7 @@ description: MM6108 HaLow WLAN component for esp32
 version: "2.9.7-esp32"
 license: "Apache-2.0"
 dependencies:
-  idf: ">=5.4.7"
+  idf: ">=5.4.2"
   morsemicro/mmutils: "==2.9.7-esp32"
   morsemicro/morselib: "==2.9.7-esp32"
   morsemicro/regdb: "==2.9.7-esp32"
