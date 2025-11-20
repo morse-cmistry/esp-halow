@@ -1,8 +1,12 @@
 # Copyright 2025 Morse Micro
 # SPDX-License-Identifier: Apache-2.0
 
+description: Morse Micro Regulatory DB
+version: "1.0.0"
+license: "Apache-2.0"
 dependencies:
-    idf:
-        version: ">=5.1.1"
-description: Morse Micro Regdb
-version: "2.9.7-esp32"
+  idf: ">=5.4.7"
+url: "https://github.com/morsemicro/"
+repository: "https://github.com/MorseMicro/mm-esp32.git"
+repository-info:
+  path: "regdb"

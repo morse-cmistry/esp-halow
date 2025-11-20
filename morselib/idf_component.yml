@@ -1,15 +1,17 @@
 # Copyright 2025 Morse Micro
 # SPDX-License-Identifier: Apache-2.0
 
+description: Morse Micro Library Fucntions
+version: "==2.9.7-esp32"
+license: "Apache-2.0"
 dependencies:
-    idf:
-        version: ">=5.1.1"
-    morsemicro/mmpktmem:
-        version: "==2.9.7-esp32"
-        path: ../mmpktmem
-description: Morselib WLAN component for the esp32s3
+  idf: ">=5.4.7"
+  morsemicro/mmpktmem: "==2.9.7-esp32"
+url: "https://github.com/morsemicro/"
+repository: "https://github.com/MorseMicro/mm-esp32.git"
+repository-info:
+  path: "morselib"
 targets:
     - esp32s3
     - esp32c6
     - esp32c3
-version: "2.9.7-esp32"
