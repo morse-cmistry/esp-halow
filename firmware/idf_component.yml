@@ -1,0 +1,10 @@
+# Copyright 2025 Morse Micro
+# SPDX-License-Identifier: Apache-2.0
+
+description: Firmware and Board Configuration Files for Morse Micro  
+version: "2.9.7-esp32"
+license: "Apache-2.0"
+url: "https://github.com/morsemicro/"
+repository: "https://github.com/MorseMicro/mm-esp32.git"
+repository-info:
+  path: "firmware"
