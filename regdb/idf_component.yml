@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 description: Morse Micro Regulatory DB
-version: "2.9.7-esp32~1"
+version: "2.9.7-esp32-1"
 license: "Apache-2.0"
 dependencies:
   idf: ">=5.4.2"

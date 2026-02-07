@@ -2,15 +2,15 @@
 # SPDX-License-Identifier: Apache-2.0
 
 description: MM6108 HaLow WLAN component for esp32
-version: "2.9.7-esp32~1"
+version: "2.9.7-esp32-1"
 license: "Apache-2.0"
 dependencies:
   idf: ">=5.4.2"
-  morsemicro/mmutils: "==2.9.7-esp32~1"
-  morsemicro/morselib: "==2.9.7-esp32~1"
-  morsemicro/regdb: "==2.9.7-esp32~1"
-  morsemicro/shims: "==2.9.7-esp32~1"
-  morsemicro/firmware: "==2.9.7-esp32~1"
+  morsemicro/mmutils: "==2.9.7-esp32-1"
+  morsemicro/morselib: "==2.9.7-esp32-1"
+  morsemicro/regdb: "==2.9.7-esp32-1"
+  morsemicro/shims: "==2.9.7-esp32-1"
+  morsemicro/firmware: "==2.9.7-esp32-1"
 url: "https://github.com/morsemicro/"
 repository: "https://github.com/MorseMicro/esp-halow.git"
 repository-info:
