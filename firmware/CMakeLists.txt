@@ -1,0 +1,1 @@
+idf_register_component()
