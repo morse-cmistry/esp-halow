@@ -37,7 +37,7 @@ idf_component_register(
 # Kconfig variables are used to determine which bcf file to add to the final
 # application. The file can be in one of two location. - In `esp-halow/firmware/` in
 # the root of the application being built.
-set(MMIOT_BLOB_DIR "${CMAKE_CURRENT_LIST_DIR}/../firmware")
+set(MMIOT_BLOB_DIR "${CMAKE_CURRENT_LIST_DIR}/../morsemicro__firmware")
 
 function(find_binary_blob FILE_VAR OBJ_VAR CONFIG_VAR)
 	# Clear the CMAKE cache to force it to search for the file every time.
@@ -70,7 +70,7 @@ find_binary_blob(FW_MBIN FW_OBJ CONFIG_MM_FW_FILE)
 
 function(make_binary_object __file __prefix)
 	get_filename_component(__file_name ${__file} NAME)
-	set(__object ${CMAKE_CURRENT_LIST_DIR}/../firmware/${__file_name}.o)
+	set(__object ${CMAKE_CURRENT_LIST_DIR}/../morsemicro__firmware/${__file_name}.o)
 	string(MAKE_C_IDENTIFIER ${__file} __file_c_identifier)
 	add_custom_command(
 		OUTPUT ${__object}

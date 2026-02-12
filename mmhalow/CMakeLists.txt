@@ -16,6 +16,5 @@ idf_component_register(
 	shims
 	regdb
 	esp_netif
-	PRIV_REQUIRES
 	esp_wifi
 )
