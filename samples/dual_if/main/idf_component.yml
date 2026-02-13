@@ -1,0 +1,9 @@
+## IDF Component Manager Manifest File
+dependencies:
+  morsemicro/halow: ^2.9.7-esp32-1
+  morsemicro/firmware: ^2.9.7-esp32-1
+  morsemicro/mmutils: ^2.9.7-esp32-1
+  morsemicro/regdb: ^2.9.7-esp32-1
+  morsemicro/shims: ^2.9.7-esp32-1
+  morsemicro/mmpktmem: ^2.9.7-esp32-1
+  morsemicro/morselib: ^2.9.7-esp32-1

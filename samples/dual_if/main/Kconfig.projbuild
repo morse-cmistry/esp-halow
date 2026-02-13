@@ -1,0 +1,7 @@
+config HALOW_SSID
+	string "Wi-Fi SSID"
+	default "MorseMicro"
+
+config HALOW_PSK
+	string "Wi-Fi Password"
+	default "12345678"
