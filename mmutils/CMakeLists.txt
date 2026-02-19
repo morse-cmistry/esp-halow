@@ -4,6 +4,8 @@ set(inc
     ".")
 set(src
     "mmbuf.c")
+set(src
+    "mmutils_wlan.c")
 
 idf_component_register(INCLUDE_DIRS ${inc}
                        SRCS ${src}
