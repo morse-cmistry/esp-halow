@@ -1,0 +1,32 @@
+## IDF Component Manager Manifest File
+dependencies:
+  morsemicro/halow:
+    version: "^2.9.7-esp32-1"
+    registry_url: "https://components-staging.espressif.com"
+
+  morsemicro/firmware:
+    version: "^2.9.7-esp32-1"
+    registry_url: "https://components-staging.espressif.com"
+
+  morsemicro/mmutils:
+    version: "^2.9.7-esp32-1"
+    registry_url: "https://components-staging.espressif.com"
+
+  morsemicro/regdb:
+    version: "^2.9.7-esp32-1"
+    registry_url: "https://components-staging.espressif.com"
+
+  morsemicro/shims:
+    version: "^2.9.7-esp32-1"
+    registry_url: "https://components-staging.espressif.com"
+
+  morsemicro/mmpktmem:
+    version: "^2.9.7-esp32-1"
+    registry_url: "https://components-staging.espressif.com"
+
+  morsemicro/morselib:
+    version: "^2.9.7-esp32-1"
+    registry_url: "https://components-staging.espressif.com"
+
+  espressif/iperf-cmd:
+    version: "~0.1.3"
