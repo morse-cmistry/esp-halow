@@ -6,5 +6,5 @@ idf_component_register(
          "test_wlan_io.c"
          "chip_cfg.c"
     INCLUDE_DIRS "."
-    REQUIRES halow mmpktmem morselib nvs_flash esp_wifi
+    REQUIRES halow nvs_flash esp_wifi
 )
