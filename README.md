@@ -5,12 +5,7 @@ This component adds Morse Micro HaLow support to ESP32 boards.
 ## Tree
 ```
 ├── firmware
-├── halow
-├── mmpktmem
-├── mmutils
-├── morselib
-├── regdb
-└── shims
+└── halow
 ```
 ### firmware
 Contains the firmware used by Morse Micro boards.
@@ -18,10 +13,10 @@ Contains the firmware used by Morse Micro boards.
 ### halow
 Implements an integration layer to present the Morse Micro Wi-Fi HaLow driver libraries, as an [ESP-NETIF](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/network/esp_netif.html).
 
-### Components
+### halow/components
 The `mmpktmem`, `mmutils` , `morselib` and `regdb` directories contain components which are brought from [MM-IoT-SDK](https://github.com/MorseMicro/mm-iot-sdk/).
 
-### shims
+### halow/components/shims
 Contains ESP32 board-specific shims for interacting with the hardware.
 
 ## Known Issues

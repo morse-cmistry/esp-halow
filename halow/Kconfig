@@ -1,3 +1,9 @@
+# Copyright 2025-2026 Morse Micro
+# SPDX-License-Identifier: Apache-2.0
+
+rsource "components/mmpktmem/Kconfig"
+rsource "components/shims/Kconfig"
+
 menu "Wi-Fi HaLow Connection Manager"
 
     config HALOW_COUNTRY_CODE
@@ -5,7 +11,7 @@ menu "Wi-Fi HaLow Connection Manager"
         default "??"
 
 	config HALOW_PS_MODE
-		bool "Enable Halow Powersave Mode"
+		bool "Enable Morse Micro HaLow Powersave Mode"
 		default false
 		help
 			This can only be set to true for devices which have the BUSY and WAKE

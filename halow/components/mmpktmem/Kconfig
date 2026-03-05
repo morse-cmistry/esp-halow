@@ -1,5 +1,6 @@
 # Copyright 2024 Morse Micro
 # SPDX-License-Identifier: Apache-2.0
+
 menu "Morse Micro Packet Memory Configuration"
     config MMPKTMEM_TX_POOL_N_BLOCKS
         int "TX queue blocks"
