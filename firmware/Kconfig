@@ -32,5 +32,17 @@ menu "Morse Micro Firmware Configuration"
             If the file is not found in either location, a warning will be reported during
             configuration.
 
+    choice MMHAL_CHIP_TYPE
+        bool "Morse Micro Chip Variant"
+        default MMHAL_CHIP_TYPE_MM6108
+        help
+            This specifies which chip function ops should be used by morselib.
+
+        config MMHAL_CHIP_TYPE_MM6108
+            bool "mmhal_mm6108"
+        config MMHAL_CHIP_TYPE_MM8108
+            bool "mmhal_mm8108"
+    endchoice
+
 endmenu
 

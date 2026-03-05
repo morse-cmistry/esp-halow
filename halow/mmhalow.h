@@ -8,13 +8,14 @@
 #include "esp_netif.h"
 #include "esp_wifi.h"
 
-#include "mmhal.h"
+#include "mmhal_wlan.h"
+#include "mmhal_os.h"
 #include "mmosal.h"
 #include "mmpkt.h"
 #include "mmwlan.h"
 #include "mmwlan_stats.h"
 
-#include "regdb.h"
+#include "mmregdb.h"
 
 typedef struct mmhalow_netif_driver
 {

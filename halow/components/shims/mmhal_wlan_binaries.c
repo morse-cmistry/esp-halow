@@ -5,7 +5,6 @@
  */
 
 #include "mmhal_wlan.h"
-#include "mmosal.h"
 
 /*
  * ---------------------------------------------------------------------------------------------
@@ -17,13 +16,11 @@
  * The following implementation reads the BCF File from the config store.
  */
 
-void mmhal_wlan_read_bcf_file(uint32_t offset, uint32_t requested_len,
-                              struct mmhal_robuf *robuf) {
-    /** Points to the start of the BCF binary image. Defined as part of the
-     * Makefile */
+void mmhal_wlan_read_bcf_file(uint32_t offset, uint32_t requested_len, struct mmhal_robuf *robuf)
+{
+    /** Points to the start of the BCF binary image. Defined as part of the Makefile */
     extern uint8_t bcf_binary_start;
-    /** Points to the end of the BCF binary image. Defined as part of the
-     * Makefile */
+    /** Points to the end of the BCF binary image. Defined as part of the Makefile */
     extern uint8_t bcf_binary_end;
 
     size_t bcf_len = &bcf_binary_end - &bcf_binary_start;
@@ -35,9 +32,9 @@ void mmhal_wlan_read_bcf_file(uint32_t offset, uint32_t requested_len,
     robuf->free_cb = NULL;
 
     /* Sanity check */
-    if (bcf_len < offset) {
-        printf("Detected an attempt to start reading off the end of the bcf "
-               "file.\n");
+    if (bcf_len < offset)
+    {
+        printf("Detected an attempt to start reading off the end of the bcf file.\n");
         return;
     }
 
@@ -51,19 +48,17 @@ void mmhal_wlan_read_bcf_file(uint32_t offset, uint32_t requested_len,
  *                                    Firmware Retrieval
  * ---------------------------------------------------------------------------------------------
  */
-/** Points to the start of the firmware binary image. Defined as part of the
- * Makefile */
+/** Points to the start of the firmware binary image. Defined as part of the Makefile */
 extern uint8_t firmware_binary_start;
-/** Points to the end of the firmware binary image. Defined as part of the
- * Makefile */
+/** Points to the end of the firmware binary image. Defined as part of the Makefile */
 extern uint8_t firmware_binary_end;
 
-void mmhal_wlan_read_fw_file(uint32_t offset, uint32_t requested_len,
-                             struct mmhal_robuf *robuf) {
+void mmhal_wlan_read_fw_file(uint32_t offset, uint32_t requested_len, struct mmhal_robuf *robuf)
+{
     uint32_t firmware_len = &firmware_binary_end - &firmware_binary_start;
-    if (offset > firmware_len) {
-        printf("Detected an attempt to start read off the end of the firmware "
-               "file.\n");
+    if (offset > firmware_len)
+    {
+        printf("Detected an attempt to start read off the end of the firmware file.\n");
         robuf->buf = NULL;
         return;
     }

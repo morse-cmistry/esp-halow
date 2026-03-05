@@ -3,6 +3,7 @@
 
 rsource "components/mmpktmem/Kconfig"
 rsource "components/shims/Kconfig"
+rsource "components/regdb/Kconfig"
 
 menu "Wi-Fi HaLow Connection Manager"
 

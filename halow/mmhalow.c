@@ -182,12 +182,15 @@ esp_err_t mmhalow_init(const wifi_init_config_t *config)
     ESP_UNUSED(config);
     MMOSAL_ASSERT(halow_netif == NULL);
 
-    /* Initialize Morse subsystems, note that they must be called in this order.
-     */
+    /* Initialize Morse subsystems, note that they must be called in this order. */
     mmhal_init();
     mmwlan_init();
 
-    mmwlan_set_channel_list(load_channel_list());
+    const struct mmwlan_regulatory_db *db = get_regulatory_db();
+    const struct mmwlan_s1g_channel_list *channel_list =
+        mmwlan_lookup_regulatory_domain(db, CONFIG_HALOW_COUNTRY_CODE);
+    ESP_LOGI(TAG, "Setting Channel List %s", CONFIG_HALOW_COUNTRY_CODE);
+    mmwlan_set_channel_list(channel_list);
 
     /* Boot the WLAN interface so that we can retrieve the firmware version. */
     struct mmwlan_boot_args boot_args = MMWLAN_BOOT_ARGS_INIT;
