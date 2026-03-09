@@ -1,8 +1,9 @@
 # Copyright 2026 Morse Micro
 # SPDX-License-Identifier: Apache-2.0
 
-set(inc
-    "./"
+set(INC
+    ${CMAKE_CURRENT_SOURCE_DIR}/..
+    ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils
@@ -10,7 +11,7 @@ set(inc
     ${CMAKE_CURRENT_SOURCE_DIR}/src/crypto
 )
 
-set(src
+set(SRCS
   ${CMAKE_CURRENT_SOURCE_DIR}/drivers_morse.c
   ${CMAKE_CURRENT_SOURCE_DIR}/os_mmosal.c
   ${CMAKE_CURRENT_SOURCE_DIR}/src/common/dragonfly.c
@@ -132,8 +133,8 @@ set(BUILD_DEFINES
   NEED_AP_MLME=1
 )
 
-add_library(mmhostap STATIC ${src} ${inc})
-target_include_directories(mmhostap PUBLIC ${inc})
+add_library(mmhostap STATIC ${SRCS})
+target_include_directories(mmhostap PUBLIC ${INC})
 target_compile_definitions(mmhostap PUBLIC ${BUILD_DEFINES})
 target_compile_options(mmhostap PRIVATE "-Wno-c++-compat")
 target_compile_options(mmhostap PRIVATE "-Wno-unused-but-set-variable")
