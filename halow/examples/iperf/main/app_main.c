@@ -1,3 +1,9 @@
+/*
+ * Copyright 2026 Morse Micro
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #include "esp_log.h"
 #include "esp_netif.h"
 #include "mmhalow.h"

@@ -1,3 +1,9 @@
+/*
+ * Copyright 2026 Morse Micro
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #include "server.h"
 
 static const char *TAG = "dual_if-AP";

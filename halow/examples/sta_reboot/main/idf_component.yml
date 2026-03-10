@@ -1,3 +1,7 @@
+# Copyright 2026 Morse Micro
+#
+# SPDX-License-Identifier: Apache-2.0
+
 ## IDF Component Manager Manifest File
 dependencies:
   morsemicro/halow:
