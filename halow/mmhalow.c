@@ -239,10 +239,15 @@ esp_err_t mmhalow_scan(struct mmhalow_scan_args *args)
 static void set_config_sta(struct mmwlan_sta_args *conf)
 {
     mmhalow_netif_driver_t *morse_drv = esp_netif_get_io_driver(halow_netif);
+    memcpy(&morse_drv->sta_args, conf, sizeof(*conf));
+}
 
+static void set_config_ap(struct mmwlan_ap_args *conf)
+{
+    mmhalow_netif_driver_t *morse_drv = esp_netif_get_io_driver(halow_netif);
     MMOSAL_ASSERT(morse_drv);
 
-    memcpy(&morse_drv->sta_args, conf, sizeof(*conf));
+    memcpy(&morse_drv->ap_args, conf, sizeof(*conf));
 }
 
 esp_err_t mmhalow_set_config(wifi_interface_t interface, mmhalow_wifi_config_t *conf)
@@ -254,6 +259,8 @@ esp_err_t mmhalow_set_config(wifi_interface_t interface, mmhalow_wifi_config_t *
             set_config_sta(&conf->sta);
             break;
         case WIFI_IF_AP:
+            set_config_ap(&conf->ap);
+            break;
         case WIFI_IF_NAN:
         default:
             return ESP_ERR_NOT_SUPPORTED;
@@ -311,4 +318,9 @@ esp_err_t mmhalow_disconnect()
 enum mmwlan_status mmhalow_status()
 {
     return mmwlan_get_sta_state();
+}
+
+void mmhalow_wifi_start(){
+    mmhalow_netif_driver_t *morse_drv = esp_netif_get_io_driver(halow_netif);
+    mmwlan_ap_enable(&morse_drv->ap_args);
 }

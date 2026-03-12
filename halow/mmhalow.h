@@ -28,10 +28,8 @@ typedef struct mmhalow_netif_driver
 {
     esp_netif_driver_base_t base;
 
-    union
-    {
-        struct mmwlan_sta_args sta_args;
-    };
+    struct mmwlan_sta_args sta_args;
+    struct mmwlan_ap_args ap_args;
 
     bool sta_conf_set;
 } mmhalow_netif_driver_t;
@@ -88,3 +86,8 @@ enum mmwlan_status mmhalow_status();
  * Print BCF/Firmware/Morselib version information
  */
 void mmhalow_print_version_info(void);
+
+/**
+ * Start an AP interface
+ */
+void mmhalow_wifi_start();
