@@ -17,6 +17,13 @@
 
 #include "mmregdb.h"
 
+typedef struct mmhalow_wifi_config_t{
+    union {
+        struct mmwlan_sta_args sta;
+        struct mmwlan_ap_args ap;
+    };
+} mmhalow_wifi_config_t;
+
 typedef struct mmhalow_netif_driver
 {
     esp_netif_driver_base_t base;
@@ -65,12 +72,12 @@ esp_err_t mmhalow_disconnect();
 /**
  * Set the network configuration
  */
-esp_err_t mmhalow_set_config(wifi_interface_t interface, wifi_config_t *conf);
+esp_err_t mmhalow_set_config(wifi_interface_t interface, mmhalow_wifi_config_t *conf);
 
 /**
  * Get the network configuration
  */
-esp_err_t mmhalow_get_config(wifi_interface_t interface, wifi_config_t *conf);
+esp_err_t mmhalow_get_config(wifi_interface_t interface, mmhalow_wifi_config_t *conf);
 
 /**
  * Get the STA State

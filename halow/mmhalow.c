@@ -236,37 +236,16 @@ esp_err_t mmhalow_scan(struct mmhalow_scan_args *args)
     return mmwlan_scan_request(&scan_req);
 }
 
-static void set_config_sta(wifi_sta_config_t *conf)
+static void set_config_sta(struct mmwlan_sta_args *conf)
 {
     mmhalow_netif_driver_t *morse_drv = esp_netif_get_io_driver(halow_netif);
-    int security_type = MMWLAN_SAE; /* Default to SAE security */
 
     MMOSAL_ASSERT(morse_drv);
 
-    (void)mmosal_safer_strcpy((char *)morse_drv->sta_args.ssid,
-                              (char *)conf->ssid,
-                              MMWLAN_SSID_MAXLEN);
-    morse_drv->sta_args.ssid_len = strlen((char *)morse_drv->sta_args.ssid);
-
-    (void)mmosal_safer_strcpy(morse_drv->sta_args.passphrase,
-                              (char *)conf->password,
-                              MMWLAN_PASSPHRASE_MAXLEN - 1);
-    morse_drv->sta_args.passphrase_len = strlen(morse_drv->sta_args.passphrase);
-
-    /* If no passphrase is provided assume open connection */
-    if (morse_drv->sta_args.passphrase_len == 0)
-    {
-        security_type = MMWLAN_OPEN;
-    }
-    else if (conf->owe_enabled)
-    {
-        security_type = MMWLAN_OWE;
-    }
-
-    morse_drv->sta_args.security_type = security_type;
+    memcpy(&morse_drv->sta_args, conf, sizeof(*conf));
 }
 
-esp_err_t mmhalow_set_config(wifi_interface_t interface, wifi_config_t *conf)
+esp_err_t mmhalow_set_config(wifi_interface_t interface, mmhalow_wifi_config_t *conf)
 {
     MMOSAL_ASSERT(conf);
     switch (interface)
@@ -282,7 +261,7 @@ esp_err_t mmhalow_set_config(wifi_interface_t interface, wifi_config_t *conf)
     return ESP_OK;
 }
 
-static void get_config_sta(wifi_sta_config_t *conf)
+static void get_config_sta(struct mmwlan_sta_args *conf)
 {
     mmhalow_netif_driver_t *morse_drv = esp_netif_get_io_driver(halow_netif);
     MMOSAL_ASSERT(morse_drv);
@@ -298,7 +277,7 @@ static void get_config_sta(wifi_sta_config_t *conf)
      */
 }
 
-esp_err_t mmhalow_get_config(wifi_interface_t interface, wifi_config_t *conf)
+esp_err_t mmhalow_get_config(wifi_interface_t interface, mmhalow_wifi_config_t *conf)
 {
     MMOSAL_ASSERT(conf);
     switch (interface)

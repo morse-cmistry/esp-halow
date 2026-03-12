@@ -64,9 +64,20 @@ void halow_init()
 
 bool halow_connect()
 {
-    wifi_config_t conf = { .sta = { .ssid = HALOW_SSID, .password = HALOW_PSK } };
+    mmhalow_wifi_config_t conf = {
+        .sta = MMWLAN_STA_ARGS_INIT,
+    };
+
+    memcpy(conf.sta.ssid, HALOW_SSID, strlen(HALOW_SSID));
+    conf.sta.ssid_len = strlen(HALOW_SSID);
+
+    memcpy(conf.sta.passphrase, HALOW_PSK, strlen(HALOW_PSK));
+    conf.sta.passphrase_len = strlen(HALOW_PSK);
+
+    conf.sta.security_type = MMWLAN_SAE;
+
     mmhalow_set_config(WIFI_IF_STA, &conf);
-    ESP_LOGI(TAG, "Connecting to SSID: %s with PSK: %s", conf.sta.ssid, conf.sta.password);
+    ESP_LOGI(TAG, "Connecting to SSID: %s with PSK: %s", HALOW_SSID, HALOW_PSK);
 
     mmhalow_connect(connect_status_callback);
 

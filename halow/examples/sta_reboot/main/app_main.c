@@ -77,9 +77,19 @@ void reboot_iteration()
 
     mmhalow_print_version_info();
 
-    wifi_config_t conf = { .sta = { .ssid = WIFI_SSID, .password = WIFI_PSK } };
+    mmhalow_wifi_config_t conf = {
+        .sta = MMWLAN_STA_ARGS_INIT,
+    };
+
+    memcpy(conf.sta.ssid, WIFI_SSID, strlen(WIFI_SSID));
+    conf.sta.ssid_len = strlen(WIFI_SSID);
+
+    memcpy(conf.sta.passphrase, WIFI_PSK, strlen(WIFI_PSK));
+    conf.sta.passphrase_len = strlen(WIFI_PSK);
+
+    conf.sta.security_type = MMWLAN_SAE;
     mmhalow_set_config(WIFI_IF_STA, &conf);
-    ESP_LOGI(TAG, "Connecting to SSID: %s with PSK: %s", conf.sta.ssid, conf.sta.password);
+    ESP_LOGI(TAG, "Connecting to SSID: %s with PSK: %s", WIFI_SSID, WIFI_PSK);
     mmhalow_connect(connect_status_callback);
 
     /* Wait 10s to connect to the AP */
