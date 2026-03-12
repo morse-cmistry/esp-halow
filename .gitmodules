@@ -1,0 +1,3 @@
+[submodule "halow/components/mm-iot-sdk"]
+	path = halow/components/mm-iot-sdk
+	url = ../mm-iot-sdk.git
