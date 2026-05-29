@@ -23,4 +23,12 @@ menu "Wi-Fi HaLow Connection Manager"
 			This can only be set to true for devices which have the BUSY and WAKE
 			pins connected.
 
+    config HALOW_AP_MODE
+        bool "Enable HaLow AP-mode support"
+        default n
+        help
+            Adds requisite components for AP-mode viathe HaLow interface. This
+            is disabled by default due to the extra functionality increasing the
+            flash and ram requirements by a non inconsequential amount.
+
 endmenu

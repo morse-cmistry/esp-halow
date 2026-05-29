@@ -18,7 +18,6 @@ set(SRCS
     ${ROOT_DIR}/src/common/mmpkt.c
     ${ROOT_DIR}/src/common/mmpkt_list.c
     ${ROOT_DIR}/src/dot11/dot11_utils.c
-    ${ROOT_DIR}/src/umac/ap/umac_ap.c
     ${ROOT_DIR}/src/umac/ate/umac_ate.c
     ${ROOT_DIR}/src/umac/ba/umac_ba.c
     ${ROOT_DIR}/src/umac/connection/umac_connection.c
@@ -31,7 +30,6 @@ set(SRCS
     ${ROOT_DIR}/src/umac/data/umac_sta_data.c
     ${ROOT_DIR}/src/umac/datapath/datapath_defrag.c
     ${ROOT_DIR}/src/umac/datapath/umac_datapath.c
-    ${ROOT_DIR}/src/umac/datapath/umac_datapath_ap.c
     ${ROOT_DIR}/src/umac/frames/action.c
     ${ROOT_DIR}/src/umac/frames/association.c
     ${ROOT_DIR}/src/umac/frames/authentication.c
@@ -63,12 +61,10 @@ set(SRCS
     ${ROOT_DIR}/src/umac/supplicant_shim/ccmp.c
     ${ROOT_DIR}/src/umac/supplicant_shim/config.c
     ${ROOT_DIR}/src/umac/supplicant_shim/driver.c
-    ${ROOT_DIR}/src/umac/supplicant_shim/driver_ap.c
     ${ROOT_DIR}/src/umac/supplicant_shim/eloop.c
     ${ROOT_DIR}/src/umac/supplicant_shim/morse_dpp_event.c
     ${ROOT_DIR}/src/umac/supplicant_shim/random.c
     ${ROOT_DIR}/src/umac/supplicant_shim/supplicant_core.c
-    ${ROOT_DIR}/src/umac/supplicant_shim/supplicant_core_ap.c
     ${ROOT_DIR}/src/umac/twt/umac_twt.c
     ${ROOT_DIR}/src/umac/umac.c
     ${ROOT_DIR}/src/umac/umac_mmdrv_shim.c
@@ -99,8 +95,22 @@ set(SRCS
     ${ROOT_DIR}/src/driver/transport/sdio_spi.c
 )
 
+if(CONFIG_HALOW_AP_MODE)
+    list(APPEND SRCS
+        ${ROOT_DIR}/src/umac/ap/umac_ap.c
+        ${ROOT_DIR}/src/umac/datapath/umac_datapath_ap.c
+        ${ROOT_DIR}/src/umac/supplicant_shim/driver_ap.c
+        ${ROOT_DIR}/src/umac/supplicant_shim/supplicant_core_ap.c
+    )
+endif()
+
 add_library(libmorse STATIC ${SRCS} ${INC})
 target_include_directories(libmorse PUBLIC ${INC})
+
+if(NOT CONFIG_HALOW_AP_MODE)
+    target_compile_definitions(libmorse PUBLIC MMWLAN_AP_DISABLED=1)
+endif()
+
 add_dependencies(libmorse mmhostap)
 target_link_libraries(libmorse PRIVATE mmutils mmhostap)
 
