@@ -166,8 +166,6 @@ add_custom_target(morselib_build ALL DEPENDS "${LIBMORSEMANG}")
 add_library(morselib STATIC IMPORTED GLOBAL)
 set_target_properties(morselib PROPERTIES IMPORTED_LOCATION "${LIBMORSEMANG}")
 
-set_property(TARGET morselib PROPERTY INTERFACE_LINK_LIBRARIES mmpktmem)
-
 target_include_directories(morselib INTERFACE ${INC})
 target_link_libraries(morselib INTERFACE shims
     mmpktmem)
