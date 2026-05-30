@@ -22,7 +22,7 @@ endif()
 add_library(shims STATIC ${src})
 target_include_directories(shims PUBLIC ${inc})
 target_link_libraries(shims PUBLIC
-    idf::firmware
+	${MM_FIRMWARE_LIB}
 	idf::log
 	idf::driver
 	idf::mbedtls
