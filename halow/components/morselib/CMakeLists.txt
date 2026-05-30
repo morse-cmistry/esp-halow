@@ -1,6 +1,8 @@
 # Copyright 2025-2026 Morse Micro
 # SPDX-License-Identifier: Apache-2.0
 
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+
 set(ROOT_DIR ${MM_IOT_SDK}/framework/morselib)
 
 set(INC
@@ -157,7 +159,7 @@ add_custom_command(
     COMMAND ${CMAKE_COMMAND} -E echo "Creating mangled libmorse"
     COMMAND ${CMAKE_COMMAND} -P "${MERGERUNNER}"
     COMMAND "${RANLIB}" "${LIBMORSEMANG}"
-    COMMAND "${MANGLER}" -t "${TOOLCHAIN_BASE}" -m "${CMAKE_CURRENT_BINARY_DIR}" ${protected_syms} "${LIBMORSEMANG}"
+    COMMAND "${Python3_EXECUTABLE}" "${MANGLER}" -t "${TOOLCHAIN_BASE}" -m "${CMAKE_CURRENT_BINARY_DIR}" ${protected_syms} "${LIBMORSEMANG}"
     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
     DEPENDS libmorse mmhostap
 )
