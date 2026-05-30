@@ -127,28 +127,42 @@ set(LIBMORSE  "$<TARGET_FILE:libmorse>")
 set(LIBHOSTAP "$<TARGET_FILE:mmhostap>")
 set(MANGLER "${MM_IOT_SDK}/framework/tools/buildsystem/librarymangler.py")
 set(MERGESCRIPT "${CMAKE_CURRENT_BINARY_DIR}/libmorse.ar")
+set(MERGERUNNER "${CMAKE_CURRENT_BINARY_DIR}/libmorse.ar.cmake")
 set(LIBMORSEMANG "${CMAKE_CURRENT_BINARY_DIR}/libmorse.a")
 
 file(GENERATE
     OUTPUT "${MERGESCRIPT}"
     CONTENT
-    "CREATE ${LIBMORSEMANG}
-    ADDLIB ${LIBMORSE}
-    ADDLIB ${LIBHOSTAP}
+    "CREATE \"${LIBMORSEMANG}\"
+    ADDLIB \"${LIBMORSE}\"
+    ADDLIB \"${LIBHOSTAP}\"
     SAVE
     END")
+
+file(GENERATE
+    OUTPUT "${MERGERUNNER}"
+    CONTENT
+    "execute_process(
+        COMMAND \"${AR}\" -M
+        INPUT_FILE \"${MERGESCRIPT}\"
+        WORKING_DIRECTORY \"${CMAKE_CURRENT_BINARY_DIR}\"
+        RESULT_VARIABLE result
+    )
+    if(NOT result EQUAL 0)
+        message(FATAL_ERROR \"ar -M failed with exit code ${result}\")
+    endif()")
 
 add_custom_command(
     OUTPUT ${LIBMORSEMANG}
     COMMAND ${CMAKE_COMMAND} -E echo "Creating mangled libmorse"
-    COMMAND ${CMAKE_COMMAND} -E cat ${MERGESCRIPT} | ${AR} -M
-    COMMAND ${RANLIB} ${LIBMORSEMANG}
-    COMMAND ${MANGLER} -t ${TOOLCHAIN_BASE} -m ${CMAKE_CURRENT_BINARY_DIR} ${protected_syms} ${LIBMORSEMANG}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    COMMAND ${CMAKE_COMMAND} -P "${MERGERUNNER}"
+    COMMAND "${RANLIB}" "${LIBMORSEMANG}"
+    COMMAND "${MANGLER}" -t "${TOOLCHAIN_BASE}" -m "${CMAKE_CURRENT_BINARY_DIR}" ${protected_syms} "${LIBMORSEMANG}"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
     DEPENDS libmorse mmhostap
 )
 
-add_custom_target(morselib_build ALL DEPENDS ${LIBMORSEMANG})
+add_custom_target(morselib_build ALL DEPENDS "${LIBMORSEMANG}")
 add_library(morselib STATIC IMPORTED GLOBAL)
 set_target_properties(morselib PROPERTIES IMPORTED_LOCATION "${LIBMORSEMANG}")
 
