@@ -13,6 +13,15 @@ Contains the firmware used by Morse Micro boards.
 ### halow
 Implements an integration layer to present the Morse Micro Wi-Fi HaLow driver libraries, as an [ESP-NETIF](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/network/esp_netif.html).
 
+### halow/configs
+Contains sdkconfig.defaults for confguring hardware specific settings for common board/hat combinations.
+
+These are intended for use with [SDKCONFIG_DEFAULTS](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/build-system.html#target-dependent-sdkconfig-defaults). Example usage:
+
+```
+idf.py set target SDKCONFIG_DEFAULTS="sdkconfig.defaults;managed_components/morsemicro__halow/configs/sdkconfig.defaults.seeed_xiao_esp32c3-seeed_xiao_mm6108"
+```
+
 ### halow/components
 The `mmpktmem`, `mmutils` , `morselib` and `regdb` directories contain components which are brought from [MM-IoT-SDK](https://github.com/MorseMicro/mm-iot-sdk/).
 
