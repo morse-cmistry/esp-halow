@@ -2,6 +2,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+menu "HaLow dual_if Example Configuration"
+
 config HALOW_SSID
 	string "Wi-Fi SSID"
 	default "MorseMicro"
@@ -9,3 +11,5 @@ config HALOW_SSID
 config HALOW_PSK
 	string "Wi-Fi Password"
 	default "12345678"
+
+endmenu

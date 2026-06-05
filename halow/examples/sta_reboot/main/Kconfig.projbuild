@@ -2,6 +2,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+menu "HaLow sta_reboot Example Configuration"
+
 config WIFI_SSID
 	string "Wi-Fi SSID"
 	default "MorseMicro"
@@ -9,3 +11,5 @@ config WIFI_SSID
 config WIFI_PSK
 	string "Wi-Fi Password"
 	default "12345678"
+
+endmenu
