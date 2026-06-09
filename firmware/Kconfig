@@ -3,7 +3,6 @@
 menu "Morse Micro Firmware Configuration"
     config MM_BCF_FILE
         string "Morse Micro Board Configuration File"
-        default "bcf_fgh100mhaamd.mbin"
         help
             Set the name of the BCF (Board Configuration File) to use.
             Example valid filenames include:

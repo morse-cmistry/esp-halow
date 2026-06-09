@@ -17,6 +17,17 @@ else()
 	message(FATAL_ERROR "Target ${IDF_TARGET} not known. Exiting...")
 endif()
 
+if(NOT (CONFIG_MM_CHIP_MM6108 OR CONFIG_MM_CHIP_MM8108) OR
+   NOT CONFIG_MM_BCF_FILE)
+    # FATAL_ERROR here blocks set-target and menuconfig
+    add_custom_target(mm_fw_config_error ALL
+        COMMAND ${CMAKE_COMMAND} -E echo
+            "ERROR: CONFIG_MM_CHIP and CONFIG_MM_BCF_FILE must be set. Set manually via menuconfig or use a sdkconfig.defaults found in managed_components/morsemicro__halow/configs"
+        COMMAND ${CMAKE_COMMAND} -E false
+    )
+    return()
+endif()
+
 if(CONFIG_MM_CHIP_MM6108)
     set(MMIOT_BLOB_DIR "${CMAKE_CURRENT_LIST_DIR}/mm6108")
     set(FW_FILE "mm6108.mbin")
