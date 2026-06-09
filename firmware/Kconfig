@@ -20,28 +20,16 @@ menu "Morse Micro Firmware Configuration"
             If the file is not found in either location, a warning will be reported during
             configuration.
 
-    config MM_FW_FILE
-        string "Morse Micro Firmware File"
-        default "mm6108.mbin"
-        help
-            This is the firmware file for the Morse Micro chip/module.
-
-            The build system will search for the specified file in the following locations:
-              1. firmware/ in the root of the application being built
-
-            If the file is not found in either location, a warning will be reported during
-            configuration.
-
-    choice MMHAL_CHIP_TYPE
+    choice MM_CHIP
         bool "Morse Micro Chip Variant"
-        default MMHAL_CHIP_TYPE_MM6108
+        optional
         help
-            This specifies which chip function ops should be used by morselib.
+            This is used for selecting HAL calls and selecting firmware.
 
-        config MMHAL_CHIP_TYPE_MM6108
-            bool "mmhal_mm6108"
-        config MMHAL_CHIP_TYPE_MM8108
-            bool "mmhal_mm8108"
+        config MM_CHIP_MM6108
+            bool "Morse Micro mm6108"
+        config MM_CHIP_MM8108
+            bool "Morse Micro mm8108"
     endchoice
 
 endmenu

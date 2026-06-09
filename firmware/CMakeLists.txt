@@ -17,12 +17,12 @@ else()
 	message(FATAL_ERROR "Target ${IDF_TARGET} not known. Exiting...")
 endif()
 
-# Kconfig variables are used to determine which bcf file to add to the final
-# application.
-if(CONFIG_MMHAL_CHIP_TYPE_MM6108)
+if(CONFIG_MM_CHIP_MM6108)
     set(MMIOT_BLOB_DIR "${CMAKE_CURRENT_LIST_DIR}/mm6108")
-elseif(CONFIG_MMHAL_CHIP_TYPE_MM8108)
+    set(FW_FILE "mm6108.mbin")
+elseif(CONFIG_MM_CHIP_MM8108)
     set(MMIOT_BLOB_DIR "${CMAKE_CURRENT_LIST_DIR}/mm8108")
+    set(FW_FILE "mm8108.mbin")
 endif()
 
 function(find_binary_blob FILE_VAR OBJ_VAR CONFIG_VAR)
@@ -52,7 +52,7 @@ function(find_binary_blob FILE_VAR OBJ_VAR CONFIG_VAR)
 endfunction()
 
 find_binary_blob(BCF_MBIN BCF_OBJ CONFIG_MM_BCF_FILE)
-find_binary_blob(FW_MBIN FW_OBJ CONFIG_MM_FW_FILE)
+find_binary_blob(FW_MBIN FW_OBJ FW_FILE)
 
 function(make_binary_object __file __prefix)
 	get_filename_component(__file_name ${__file} NAME)
