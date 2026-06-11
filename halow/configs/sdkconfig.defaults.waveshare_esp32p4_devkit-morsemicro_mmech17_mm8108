@@ -1,5 +1,5 @@
 # BOARD: Waveshare ESP32P4 Dev Kit
-# HAT: Morse Micro MMECH06 MM6108
+# HAT: Morse Micro MMECH17 MM8108
 
 # Pin configuration
 CONFIG_MM_RESET_N=24
@@ -12,8 +12,8 @@ CONFIG_MM_SPI_CS=36
 CONFIG_MM_SPI_IRQ=1
 
 # Morse Micro chip configuration
-CONFIG_MM_BCF_FILE="bcf_mf08651_us.bin"
-CONFIG_MM_CHIP_MM6108=y
+CONFIG_MM_BCF_FILE="bcf_mf15457.bin"
+CONFIG_MM_CHIP_MM8108=y
 
 # ESP32P4 needs explicit crypto support
 CONFIG_MBEDTLS_CMAC_C=y
