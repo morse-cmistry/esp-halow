@@ -9,15 +9,12 @@ set(src "mmosal_shim_freertos_esp32.c"
 	"crypto_mbedtls_mm.c"
 )
 
-# Define architecture specific paths and variables
-if(${IDF_TARGET} STREQUAL "esp32s3")
-	set(inc "include/esp32s3" ".")
-elseif(${IDF_TARGET} STREQUAL "esp32c6")
-	set(inc "include/esp32c6" ".")
-elseif(${IDF_TARGET} STREQUAL "esp32c3")
-	set(inc "include/esp32c3" ".")
+idf_build_get_property(ARCH IDF_TARGET_ARCH)
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/include/${ARCH}")
+    message(WARN "Architecture ${ARCH} missing morselib debug macro mappings. Stubbing with noops.")
+    set(inc "include/unknown" ".")
 else()
-	message(FATAL_ERROR "Target ${IDF_TARGET} not known. Exiting...")
+    set(inc "include/${ARCH}" ".")
 endif()
 
 foreach(pin MM_RESET_N MM_BUSY MM_SPI_SCK MM_SPI_MOSI MM_SPI_MISO MM_SPI_CS)
