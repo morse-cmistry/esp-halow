@@ -6,19 +6,25 @@ menu "Morse Micro Firmware Configuration"
         help
             Set the name of or relative path to the BCF (Board Configuration File).
 
-            .bin files will be converted to .mbin (based on file extension).
+            Only the filename is required; the bcf directory of the morse-firmware
+            submodule is searched recursively, so vendor subdirectories do not need
+            to be specified.
+
+            .bin files are converted to .mbin (based on file extension). A .mbin may
+            be requested even when only the .bin source is shipped: the .bin is then
+            located and run through the conversion automatically.
 
             Example valid filenames include:
               - bcf_mf08651_us.bin
-              - bcf_mf08551.bin
-              - bcf_mf08251.mbin
-              - bcf_mf03120.mbin
+              - bcf_mf15457.bin
+              - bcf_fgh100mhaamd.mbin
+              - bcf_aw_hm593.mbin
 
             This file provides board-specific configuration data for the Morse Micro chip/module.
 
             The build system will search for the specified file in the following locations:
               1. the relative path from the project root
-              2. managed_components/morsemicro__halow/components/firmware
+              2. recursively within the morse-firmware submodule's bcf directory
 
             If a file is not found, an error will be thrown when building.
 

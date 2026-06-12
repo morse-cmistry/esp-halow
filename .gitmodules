@@ -1,3 +1,6 @@
 [submodule "halow/components/mm-iot-sdk"]
 	path = halow/components/mm-iot-sdk
 	url = ../mm-iot-sdk.git
+[submodule "halow/components/firmware/morse-firmware"]
+	path = halow/components/firmware/morse-firmware
+	url = https://github.com/MorseMicro/morse-firmware
