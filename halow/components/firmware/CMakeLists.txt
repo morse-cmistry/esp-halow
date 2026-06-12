@@ -48,6 +48,32 @@ function(find_binary_blob FILE_VAR CONFIG_VAR)
 
 	message(STATUS "${FILE_VAR}: ${${FILE_VAR}}")
 
+	get_filename_component(__blob_ext ${${FILE_VAR}} LAST_EXT)
+
+	if(${__blob_ext} STREQUAL ".bin")
+
+		idf_component_get_property(_halow_dir halow COMPONENT_DIR)
+
+		idf_build_get_property(__python PYTHON)
+
+		set(__bin ${${FILE_VAR}})
+
+		get_filename_component(__base_file ${__bin} NAME)
+
+		set(${FILE_VAR} ${CMAKE_CURRENT_BINARY_DIR}/${__base_file}.mbin)
+
+		add_custom_command(
+			OUTPUT ${${FILE_VAR}}
+            COMMAND ${__python} ${CMAKE_CURRENT_LIST_DIR}/../mm-iot-sdk/framework/tools/buildsystem/convert-bin-to-mbin.py
+				-o ${${FILE_VAR}} ${__bin}
+			DEPENDS ${__bin}
+			COMMENT "Converting ${__bin} to mbin"
+		)
+
+	endif()
+
+	get_filename_component(__file_name ${${FILE_VAR}} NAME)
+
     set(${FILE_VAR} "${${FILE_VAR}}" PARENT_SCOPE)
 endfunction()
 

@@ -5,9 +5,12 @@ menu "Morse Micro Firmware Configuration"
         string "Morse Micro Board Configuration File"
         help
             Set the name of or relative path to the BCF (Board Configuration File).
+
+            .bin files will be converted to .mbin (based on file extension).
+
             Example valid filenames include:
-              - bcf_mf08651_us.mbin
-              - bcf_mf08551.mbin
+              - bcf_mf08651_us.bin
+              - bcf_mf08551.bin
               - bcf_mf08251.mbin
               - bcf_mf03120.mbin
 
