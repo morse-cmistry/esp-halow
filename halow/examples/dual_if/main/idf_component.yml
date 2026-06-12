@@ -7,6 +7,3 @@ dependencies:
   morsemicro/halow:
     version: ^2.10.2-esp32-2
     override_path: '../../../'
-  morsemicro/firmware:
-    version: ^2.10.2-esp32-2
-    override_path: '../../../../firmware'

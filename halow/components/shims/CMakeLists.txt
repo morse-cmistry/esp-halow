@@ -45,7 +45,6 @@ elseif(CONFIG_MM_CHIP_MM8108)
 endif()
 
 target_link_libraries(shims PUBLIC
-	${MM_FIRMWARE_LIB}
 	idf::log
 	idf::driver
 	idf::mbedtls
@@ -53,9 +52,10 @@ target_link_libraries(shims PUBLIC
 )
 
 target_link_libraries(shims PUBLIC
+	morsefirmware
 	morselib
 	mmutils
 )
 
-add_dependencies(shims morselib ${MM_FIRMWARE_LIB})
+add_dependencies(shims morselib morsefirmware)
 

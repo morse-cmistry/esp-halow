@@ -6,7 +6,6 @@ version: "2.10.4-esp32-2"
 license: "Apache-2.0"
 dependencies:
   idf: ">=5.4.2,<6.0"
-  morsemicro/firmware: "==2.10.4-esp32-2"
 url: "https://github.com/morsemicro/"
 repository: "https://github.com/MorseMicro/esp-halow.git"
 repository-info:

@@ -7,9 +7,6 @@ dependencies:
   morsemicro/halow:
     version: ^2.10.4-esp32-2
     override_path: '../../../'
-  morsemicro/firmware:
-    version: ^2.10.4-esp32-2
-    override_path: '../../../../firmware'
 
   espressif/iperf-cmd:
     version: "~0.1.3"
