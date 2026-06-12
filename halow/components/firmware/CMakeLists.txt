@@ -25,12 +25,19 @@ function(find_binary_blob FILE_VAR CONFIG_VAR)
 	# Clear the CMAKE cache to force it to search for the file every time.
 	unset(${FILE_VAR} CACHE)
 
-	find_file(
-		${FILE_VAR}
-		NAMES ${${CONFIG_VAR}}
-		PATHS ${MMIOT_BLOB_DIR}
-		NO_DEFAULT_PATH
-	)
+	get_filename_component(__project_path ${${CONFIG_VAR}} ABSOLUTE BASE_DIR ${PROJECT_DIR})
+
+	# Check if the blob exists at a path relative to the project root
+	if(EXISTS ${__project_path} AND NOT IS_DIRECTORY ${__project_path})
+		set(${FILE_VAR} ${__project_path})
+	else()
+		find_file(
+			${FILE_VAR}
+			NAMES ${${CONFIG_VAR}}
+			PATHS ${MMIOT_BLOB_DIR}
+			NO_DEFAULT_PATH
+		)
+	endif()
 
 	if(NOT ${FILE_VAR})
 		message(WARNING "Invalid ${FILE_VAR} specified: ${${CONFIG_VAR}}\n"

@@ -4,7 +4,7 @@ menu "Morse Micro Firmware Configuration"
     config MM_BCF_FILE
         string "Morse Micro Board Configuration File"
         help
-            Set the name of the BCF (Board Configuration File) to use.
+            Set the name of or relative path to the BCF (Board Configuration File).
             Example valid filenames include:
               - bcf_mf08651_us.mbin
               - bcf_mf08551.mbin
@@ -14,10 +14,10 @@ menu "Morse Micro Firmware Configuration"
             This file provides board-specific configuration data for the Morse Micro chip/module.
 
             The build system will search for the specified file in the following locations:
-              1. firmware/ in the root of the application being built
+              1. the relative path from the project root
+              2. managed_components/morsemicro__halow/components/firmware
 
-            If the file is not found in either location, a warning will be reported during
-            configuration.
+            If a file is not found, an error will be thrown when building.
 
     choice MM_CHIP
         bool "Morse Micro Chip Variant"
