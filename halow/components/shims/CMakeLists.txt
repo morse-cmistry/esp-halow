@@ -35,12 +35,6 @@ endif()
 add_library(shims STATIC ${src})
 target_include_directories(shims PUBLIC ${inc})
 
-if(CONFIG_MM_CHIP_MM6108)
-	target_compile_definitions(shims PRIVATE CONFIG_MMHAL_CHIP_TYPE_MM6108=1)
-elseif(CONFIG_MM_CHIP_MM8108)
-	target_compile_definitions(shims PRIVATE CONFIG_MMHAL_CHIP_TYPE_MM8108=1)
-endif()
-
 target_link_libraries(shims PUBLIC
 	idf::log
 	idf::driver

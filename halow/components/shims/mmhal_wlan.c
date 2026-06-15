@@ -328,9 +328,9 @@ const struct mmhal_chip *mmhal_get_chip(void)
 {
     /* This is a define that is set by the build system in idf.py menuconfig to select the Morse
      * chip type. See the API documentation for mmhal_get_chip() for more information. */
-#if CONFIG_MMHAL_CHIP_TYPE_MM6108
+#if CONFIG_MM_CHIP_MM6108
     return &mmhal_mm6108;
-#elif CONFIG_MMHAL_CHIP_TYPE_MM8108
+#elif CONFIG_MM_CHIP_MM8108
     return &mmhal_mm8108;
 #endif
 }
