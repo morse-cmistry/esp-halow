@@ -12,5 +12,5 @@ CONFIG_MM_SPI_CS=7
 CONFIG_MM_SPI_IRQ=25
 
 # Morse Micro chip configuration
-CONFIG_MM_BCF_FILE="bcf_fgh100mhaamd.mbin"
+CONFIG_MM_BCF_FILE="bcf_fgh100mhaamd.bin"
 CONFIG_MM_CHIP_MM6108=y
