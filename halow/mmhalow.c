@@ -180,7 +180,7 @@ static void wifi_start(void *esp_netif)
 esp_err_t mmhalow_init(const wifi_init_config_t *config)
 {
     ESP_UNUSED(config);
-    MMOSAL_ASSERT(halow_netif == NULL);
+    assert(halow_netif == NULL);
 
     /* Initialize Morse subsystems, note that they must be called in this order. */
     mmhal_init();
@@ -210,10 +210,10 @@ esp_err_t mmhalow_init(const wifi_init_config_t *config)
     esp_netif_attach(netif, driver);
 
     status = mmwlan_register_rx_pkt_cb(halow_rx, netif);
-    MMOSAL_ASSERT(status == MMWLAN_SUCCESS);
+    assert(status == MMWLAN_SUCCESS);
 
     status = mmwlan_register_link_state_cb(mmhalow_link_state, netif);
-    MMOSAL_ASSERT(status == MMWLAN_SUCCESS);
+    assert(status == MMWLAN_SUCCESS);
 
     wifi_start(netif);
 
@@ -228,7 +228,7 @@ esp_err_t mmhalow_deinit()
 
 esp_err_t mmhalow_scan(struct mmhalow_scan_args *args)
 {
-    MMOSAL_ASSERT(args);
+    assert(args);
     struct mmwlan_scan_req scan_req = MMWLAN_SCAN_REQ_INIT;
     scan_req.scan_rx_cb = args->rx_cb;
     scan_req.scan_complete_cb = args->complete_cb;
@@ -245,14 +245,14 @@ static void set_config_sta(struct mmwlan_sta_args *conf)
 static void set_config_ap(struct mmwlan_ap_args *conf)
 {
     mmhalow_netif_driver_t *morse_drv = esp_netif_get_io_driver(halow_netif);
-    MMOSAL_ASSERT(morse_drv);
+    assert(morse_drv);
 
     memcpy(&morse_drv->ap_args, conf, sizeof(*conf));
 }
 
 esp_err_t mmhalow_set_config(wifi_interface_t interface, mmhalow_wifi_config_t *conf)
 {
-    MMOSAL_ASSERT(conf);
+    assert(conf);
     switch (interface)
     {
         case WIFI_IF_STA:
@@ -271,11 +271,11 @@ esp_err_t mmhalow_set_config(wifi_interface_t interface, mmhalow_wifi_config_t *
 static void get_config_sta(struct mmwlan_sta_args *conf)
 {
     mmhalow_netif_driver_t *morse_drv = esp_netif_get_io_driver(halow_netif);
-    MMOSAL_ASSERT(morse_drv);
+    assert(morse_drv);
 
-    (void)mmosal_safer_strcpy((char *)conf->ssid,
-                              (char *)morse_drv->sta_args.ssid,
-                              sizeof(conf->ssid));
+    (void)strlcpy((char *)conf->ssid,
+                  (char *)morse_drv->sta_args.ssid,
+                  sizeof(conf->ssid));
 
     /* We cannot safely copy password from sta_args.passphrase into conf->password because:
      * sta_args.passphrase == 100 bytes
@@ -286,7 +286,7 @@ static void get_config_sta(struct mmwlan_sta_args *conf)
 
 esp_err_t mmhalow_get_config(wifi_interface_t interface, mmhalow_wifi_config_t *conf)
 {
-    MMOSAL_ASSERT(conf);
+    assert(conf);
     switch (interface)
     {
         case WIFI_IF_STA:
@@ -303,7 +303,7 @@ esp_err_t mmhalow_get_config(wifi_interface_t interface, mmhalow_wifi_config_t *
 esp_err_t mmhalow_connect(mmwlan_sta_status_cb_t cb)
 {
     mmhalow_netif_driver_t *morse_drv = esp_netif_get_io_driver(halow_netif);
-    MMOSAL_ASSERT(morse_drv);
+    assert(morse_drv);
 
     ESP_LOGI(TAG, "Attempting to connect to: %s", morse_drv->sta_args.ssid);
 
