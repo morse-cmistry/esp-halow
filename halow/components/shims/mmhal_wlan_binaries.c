@@ -5,6 +5,9 @@
  */
 
 #include "mmhal_wlan.h"
+#include "esp_log.h"
+
+static const char* TAG = "MMHaLow";
 
 /*
  * ---------------------------------------------------------------------------------------------
@@ -34,7 +37,7 @@ void mmhal_wlan_read_bcf_file(uint32_t offset, uint32_t requested_len, struct mm
     /* Sanity check */
     if (bcf_binary_length < offset)
     {
-        printf("Detected an attempt to start reading off the end of the bcf file.\n");
+        ESP_LOGE(TAG, "Detected an attempt to start reading off the end of the bcf file.");
         return;
     }
 
@@ -58,7 +61,7 @@ void mmhal_wlan_read_fw_file(uint32_t offset, uint32_t requested_len, struct mmh
     uint32_t firmware_len = firmware_binary_length;
     if (offset > firmware_binary_length)
     {
-        printf("Detected an attempt to start read off the end of the firmware file.\n");
+        ESP_LOGE(TAG, "Detected an attempt to start read off the end of the firmware file.");
         robuf->buf = NULL;
         return;
     }

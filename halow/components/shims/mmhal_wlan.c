@@ -13,10 +13,13 @@
 #include "mmutils.h"
 
 #include "esp_system.h"
+#include "esp_log.h"
 #include "driver/gpio.h"
 #include "esp_mac.h"
 #include "driver/spi_master.h"
 #include "driver/spi_common.h"
+
+static const char* TAG = "MMHaLow";
 
 /**
  * The number of bytes to send as part of @ref mmhal_wlan_send_training_seq for SD over SPI.
@@ -79,7 +82,7 @@ static void wlan_hal_spi_init(void)
     ret = spi_bus_initialize(SPI2_HOST, &buscfg, SPI_DMA_CH_AUTO);
     if (ret != ESP_OK)
     {
-        printf("spi_bus_initialize failed\n");
+        ESP_LOGE(TAG, "spi_bus_initialize failed\n");
     }
 
     /* Selected the highest available SPI clock speed that is still below the MM6108's maximum of
@@ -93,7 +96,7 @@ static void wlan_hal_spi_init(void)
     ret = spi_bus_add_device(SPI2_HOST, &dev_cfg, &spi_handle);
     if (ret != ESP_OK)
     {
-        printf("spi_bus_add_device failed\n");
+        ESP_LOGE(TAG, "spi_bus_add_device failed\n");
     }
 
     /* The actual clock frequency may not be the one that was set as it is re-calculated by the
@@ -101,7 +104,7 @@ static void wlan_hal_spi_init(void)
      * could be above the value set. */
     int actual_freq_khz = 0;
     spi_device_get_actual_freq(spi_handle, &actual_freq_khz);
-    printf("Actual SPI CLK %dkHz\n", actual_freq_khz);
+    ESP_LOGD(TAG, "Actual SPI CLK %dkHz\n", actual_freq_khz);
 }
 
 static void wlan_hal_spi_deinit(void)
@@ -109,13 +112,13 @@ static void wlan_hal_spi_deinit(void)
     esp_err_t ret = spi_bus_remove_device(spi_handle);
     if (ret != ESP_OK)
     {
-        printf("spi_bus_remove_device failed\n");
+        ESP_LOGE(TAG, "spi_bus_remove_device failed\n");
     }
 
     ret = spi_bus_free(SPI2_HOST);
     if (ret != ESP_OK)
     {
-        printf("spi_bus_initialize failed\n");
+        ESP_LOGE(TAG, "spi_bus_initialize failed\n");
     }
 }
 

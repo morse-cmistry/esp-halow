@@ -12,6 +12,7 @@
 #include "rom/ets_sys.h"
 #include "esp_debug_helpers.h"
 #include "esp_private/startup_internal.h"
+#include "esp_log.h"
 #include "esp_idf_version.h"
 #include "esp_timer.h"
 
@@ -19,6 +20,8 @@
 #include "mmhal_os.h"
 
 /* --------------------------------------------------------------------------------------------- */
+
+static const char* TAG = "MMHaLow";
 
 /** Maximum number of failure records to store (must be a power of 2). */
 #define MAX_FAILURE_RECORDS 4
@@ -88,7 +91,7 @@ static void mmosal_dump_failure_info(void)
         unsigned idx = FAST_MOD(first_failure_num + failure_offset, MAX_FAILURE_RECORDS);
         struct mmosal_failure_info *info = &preserved_failure_info.info[idx];
 
-        ets_printf("Failure %u logged at pc 0x%08lx, lr 0x%08lx, line %ld in %08lx\n",
+        ESP_EARLY_LOGE(TAG, "Failure %u logged at pc 0x%08lx, lr 0x%08lx, line %ld in %08lx\n",
                    first_failure_num + failure_offset,
                    info->pc,
                    info->lr,
@@ -97,7 +100,7 @@ static void mmosal_dump_failure_info(void)
 
         for (ii = 0; ii < sizeof(info->platform_info) / sizeof(info->platform_info[0]); ii++)
         {
-            ets_printf("    0x%08lx\n", info->platform_info[ii]);
+            ESP_EARLY_LOGE(TAG, "    0x%08lx\n", info->platform_info[ii]);
         }
     }
 
@@ -106,7 +109,7 @@ static void mmosal_dump_failure_info(void)
 
 void mmosal_impl_assert(void)
 {
-    ets_printf("MMOSAL Assert, CPU %d (current core) backtrace", xPortGetCoreID());
+    ESP_EARLY_LOGE(TAG, "MMOSAL Assert, CPU %d (current core) backtrace", xPortGetCoreID());
     (void)esp_backtrace_print(100);
 #ifdef HALT_ON_ASSERT
     if (preserved_failure_info.magic == ASSERT_INFO_MAGIC)
