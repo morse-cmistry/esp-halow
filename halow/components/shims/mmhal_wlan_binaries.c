@@ -21,12 +21,12 @@ static const char* TAG = "MMHaLow";
 
 void mmhal_wlan_read_bcf_file(uint32_t offset, uint32_t requested_len, struct mmhal_robuf *robuf)
 {
-    /** Points to the start of the BCF binary image. Embedded by the firmware CMake */
+    /* Start/end of the BCF binary image. Embedded by the firmware CMake.
+     * Length is derived from the symbols rather than reading the embedded
+     * `bcf_binary_length` word, which is not guaranteed to be word-aligned. */
     extern const uint8_t bcf_binary[];
-    /** Length of the BCF binary image. Embedded by the firmware CMake */
-    extern const uint32_t bcf_binary_length;
-
-    size_t bcf_len = bcf_binary_length;
+    extern const uint8_t _binary_bcf_binary_end[];
+    const uint32_t bcf_binary_length = (uint32_t)(_binary_bcf_binary_end - bcf_binary);
 
     /* Initialise robuf */
     robuf->buf = NULL;
@@ -42,7 +42,7 @@ void mmhal_wlan_read_bcf_file(uint32_t offset, uint32_t requested_len, struct mm
     }
 
     robuf->buf = (uint8_t *)bcf_binary + offset;
-    robuf->len = bcf_len - offset;
+    robuf->len = ((size_t)bcf_binary_length) - offset;
     robuf->len = (robuf->len < requested_len) ? robuf->len : requested_len;
 }
 
@@ -51,13 +51,16 @@ void mmhal_wlan_read_bcf_file(uint32_t offset, uint32_t requested_len, struct mm
  *                                    Firmware Retrieval
  * ---------------------------------------------------------------------------------------------
  */
-/** Points to the start of the firmware binary image. Embedded by the firmware CMake */
+/* Start/end of the firmware binary image. Embedded by the firmware CMake.
+ * Length is derived from the symbols rather than reading the embedded
+ * `firmware_binary_length` word, which is not guaranteed to be word-aligned. */
 extern const uint8_t firmware_binary[];
-/** Points to the end of the firmware binary image. Embedded by the firmware CMake */
-extern const uint32_t firmware_binary_length;
+extern const uint8_t _binary_firmware_binary_end[];
 
 void mmhal_wlan_read_fw_file(uint32_t offset, uint32_t requested_len, struct mmhal_robuf *robuf)
 {
+    const uint32_t firmware_binary_length =
+        (uint32_t)(_binary_firmware_binary_end - firmware_binary);
     uint32_t firmware_len = firmware_binary_length;
     if (offset > firmware_binary_length)
     {
