@@ -12,14 +12,27 @@ command for UDP/TCP RX/TX throughput tests via the serial moitor.
 
 ---
 
+## Building
+Set the target, layering in the board profile for your board/hat, then configure and
+build. See [configs](../../configs/README.md) for the full `SDKCONFIG_DEFAULTS` usage.
+
+Setting the Wi-Fi HaLow country code is required — in `menuconfig` it is under
+`Wi-Fi HaLow Connection Manager → Country code to use for Wi-Fi HaLow`
+(`CONFIG_HALOW_COUNTRY_CODE`).
+
+For example, for a Seeed Studio XIAO ESP32-S3 paired with a XIAO Wi-Fi HaLow
+(MM6108) hat:
+
+    SDKCONFIG_DEFAULTS="sdkconfig.defaults;managed_components/morsemicro__halow/configs/sdkconfig.defaults.seeed_xiao_esp32s3-seeed_xiao_mm6108" \
+        idf.py set-target esp32s3
+    idf.py menuconfig build   # set the country code (required)
+
 ## Running
-1. Set the target for your ESP board, e.g. `idf.py set-target esp32c6`.
-2. Set the Wi-Fi HaLow country code (required). Run `idf.py menuconfig` and set
-   `Wi-Fi HaLow Connection Manager → Country code to use for Wi-Fi HaLow`
-   (`CONFIG_HALOW_COUNTRY_CODE`) to your two-letter region code.
-3. Build, flash and monitor, layering the board profile for your board/hat if required. See
-   [configs](../../configs/README.md) for the full `SDKCONFIG_DEFAULTS` usage.
-4. At the `iperf>` prompt, run `help` for the command list, then `iperf` to test throughput.
+Flash and open the serial monitor to reach the REPL:
+
+    idf.py flash monitor
+
+At the `iperf>` prompt, run `help` for the command list, then `iperf` to test throughput.
 
 ## Configuration
 Options under `HaLow iperf Example Configuration` (`idf.py menuconfig`):
