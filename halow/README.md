@@ -1,4 +1,5 @@
-# mmhalow - Morse Micro Wi-Fi HaLow ESP32 Component
+# Morse Micro Wi-Fi HaLow for ESP-IDF
+![Morse Micro Banner](https://github.com/MorseMicro/.github/blob/main/images/morsemicro.png?raw=true)
 
 | [💬 Community Forum](https://community.morsemicro.com/latest) |
 [🌐 Website](https://www.morsemicro.com) |
@@ -6,21 +7,19 @@
 
 An ESP-IDF component that provides Wi-Fi HaLow (802.11ah) connectivity for ESP32 microcontrollers using Morse Micro wireless transceivers.
 
-**Version:** 2.10.4-esp32-1  
-**License:** Apache-2.0  
-**ESP-IDF requirement:** >= 5.4.2  
-
 ---
 
 ## Overview
 
 Wi-Fi HaLow (IEEE 802.11ah) operates in the sub-1 GHz band, offering longer range and better obstacle penetration than standard Wi-Fi, at the cost of lower throughput. It is well suited for IoT applications.
 
-This component wraps the Morse Micro IoT SDK (`mm-iot-sdk`) and exposes a concise API modelled on ESP-IDF's `esp_wifi` interface so it integrates naturally into existing ESP-IDF projects.
+This component wraps the (Morse Micro IoT SDK `mm-iot-sdk`)[https://github.com/morsemicro/mm-iot-sdk] and exposes a concise API modelled on ESP-IDF's `esp_wifi` interface so it integrates naturally into existing ESP-IDF projects.
 
 ---
 
-## Supported Hardware
+## Hardware
+
+Whilst best effort has been made to ensure all ESP32 targets build, only the following target/transceiver combinations have been tested against our examples using the [supplied SDKConfig.defaults in the configs directory](./configs/README.md).
 
 | MCU | Transceiver |
 |-----|-------------|
@@ -29,6 +28,24 @@ This component wraps the Morse Micro IoT SDK (`mm-iot-sdk`) and exposes a concis
 | ESP32-C6 | MM6108 |
 | ESP32-S3 | MM6108 |
 | ESP32-P4 | MM6108, MM8108 |
+
+If you're not using a predefined board definition you'll need to define the following parameters in your project's configuration based on your board's hardware:
+
+| Option | Type |  Description |
+| --- | --- |  --- |
+| CONFIG_MM_RESET_N | int | Pin routed to reset_n on the Morse Micro chip/module |
+| CONFIG_MM_WAKE | int | Pin routed to wake on the Morse Micro chip/module |
+| CONFIG_MM_BUSY | int | Pin routed to busy on the Morse Micro chip/module |
+| CONFIG_MM_SPI_SCK | int | Pin routed to spi's sck on the Morse Micro chip/module |
+| CONFIG_MM_SPI_MOSI | int | Pin routed to spi's mosi on the Morse Micro chip/module |
+| CONFIG_MM_SPI_MISO | int | Pin routed to spi's miso on the Morse Micro chip/module |
+| CONFIG_MM_SPI_CS | int | Pin routed to spi's cs on the Morse Micro chip/module |
+| CONFIG_MM_SPI_IRQ | int | Pin routed to the spi irq on the Morse Micro chip/module |
+| CONFIG_MM_BCF_FILE | string | String to the Board Configuration File for the Morse Micro chip/module. These are found in (morse-firmware)[https://github.com/morsemicro/morse-firmare] |
+| CONFIG_MM_CHIP_MM6108 | bool | Set to true if your chip is a MM6108 |
+| CONFIG_MM_CHIP_MM8108 | bool | Set to true if your chip is a MM8108 |
+
+If you have any difficulties ascertaining these values, feel free to create a thread on the (community forum)[https://community.morsemicro.com/latest].
 
 ---
 
@@ -64,6 +81,8 @@ Run `idf.py menuconfig` and navigate to **Wi-Fi HaLow Connection Manager**:
 | `WIFI_HALOW` | `y` | Enable HaLow support |
 | `HALOW_COUNTRY_CODE` | `??` | Two-character country code (e.g. `US`, `AU`, `JP`) |
 | `HALOW_PS_MODE` | `n` | Enable power-save mode (requires BUSY/WAKE pins) |
+
+This is also where you would define your (hardware configuration values)[#hardware], if you're not using a predefinied (config)[./configs/README.md].
 
 ### 3. Typical STA usage
 
@@ -135,7 +154,7 @@ idf.py flash monitor
 ## Component Structure
 
 ```
-halow/
+.
 ├── mmhalow.c            # Component implementation
 ├── mmhalow.h            # Public API
 ├── CMakeLists.txt
@@ -150,6 +169,7 @@ halow/
 │   ├── mmpktmem/        # Packet memory pool
 │   ├── mmutils/         # WLAN helper utilities
 │   └── regdb/           # Regulatory channel database
+├── configs/             # SDKConfig defaults for common board + hat combinations
 └── examples/
 ```
 
