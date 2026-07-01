@@ -14,10 +14,8 @@ config WIFI_PSK
 
 config S1G_CHANNEL
     int "S1G Channel"
-    default 27
 
 config S1G_OPCLASS
     int "S1G Op-Class"
-    default 68
 
 endmenu
