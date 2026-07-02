@@ -38,7 +38,7 @@ Options under `HaLow softap Example Configuration` (`idf.py menuconfig`):
 | --- | --- | --- | --- |
 | `CONFIG_WIFI_SSID` | string | `"MorseMicroESP32AP"` | SSID to advertise. |
 | `CONFIG_WIFI_PSK` | string | `"12345678"` | Passphrase; leave empty for an open AP. |
-| `CONFIG_S1G_CHANNEL` | int | `27` | S1G channel number to operate on. |
-| `CONFIG_S1G_OPCLASS` | int | `68` | S1G operating class. |
+| `CONFIG_S1G_CHANNEL` | int |  | S1G channel number to operate on. |
+| `CONFIG_S1G_OPCLASS` | int |  | S1G operating class. |
 
 The channel and operating class must be valid for the configured country code.
