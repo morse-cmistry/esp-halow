@@ -91,7 +91,7 @@ function(find_binary_blob OUT_VAR REQUESTED_NAME SEARCH_ROOT)
         add_custom_command(
             OUTPUT "${mbin}"
             COMMAND ${python} ${CMAKE_CURRENT_LIST_DIR}/../mm-iot-sdk/framework/tools/buildsystem/convert-bin-to-mbin.py
-                -o "${mbin}" "${found}"
+                -t 1,2:2 -o "${mbin}" "${found}"
             DEPENDS "${found}"
         )
         message(STATUS "Converting ${name} to mbin")
