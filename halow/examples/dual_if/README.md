@@ -38,6 +38,8 @@ Flash and open the serial monitor to watch both interfaces come up:
 Once the Wi-Fi HaLow link is up, connect to the ESP's native SoftAP to reach the HTTP
 server, and watch for the periodic UDP packets sent to `192.168.12.1:12345`.
 
+The ESP AP should be accessible from 2.4GHz Wi-Fi via the netwrok `SSID = ESP32-HELLO` with the pasword of `PSK = hello1234`.
+
 ## Configuration
 Options under `HaLow dual_if Example Configuration` (`idf.py menuconfig`):
 
