@@ -11,13 +11,13 @@ set(src "mmosal_shim_freertos_esp32.c"
 
 idf_build_get_property(ARCH IDF_TARGET_ARCH)
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/include/${ARCH}")
-    message(WARN "Architecture ${ARCH} missing morselib debug macro mappings. Stubbing with noops.")
+    message(WARNING "Architecture ${ARCH} missing morselib debug macro mappings. Stubbing with noops.")
     set(inc "include/unknown" ".")
 else()
     set(inc "include/${ARCH}" ".")
 endif()
 
-foreach(pin MM_RESET_N MM_BUSY MM_SPI_SCK MM_SPI_MOSI MM_SPI_MISO MM_SPI_CS)
+foreach(pin MM_RESET_N MM_SPI_SCK MM_SPI_MOSI MM_SPI_MISO MM_SPI_CS)
     if(CONFIG_${pin} LESS 0)
         list(APPEND _mm_unset_pins ${pin})
     endif()
@@ -29,6 +29,17 @@ if(_mm_unset_pins)
         COMMAND ${CMAKE_COMMAND} -E echo
             "ERROR: the following MM pins must be set to a valid pin number: ${_mm_unset_pins_str}. Set them via menuconfig or use a sdkconfig.defaults found in managed_components/morsemicro__halow/configs"
         COMMAND ${CMAKE_COMMAND} -E false
+        VERBATIM
+    )
+endif()
+
+# Check if only MM_WAKE is defined OR only MM_BUSY is defined
+if((NOT (CONFIG_MM_WAKE LESS 0) AND CONFIG_MM_BUSY LESS 0) OR (CONFIG_MM_WAKE LESS 0 AND NOT (CONFIG_MM_BUSY LESS 0)))
+    add_custom_target(_mm_ps_pins_error ALL
+        COMMAND ${CMAKE_COMMAND} -E echo
+            "ERROR: MM_WAKE and MM_BUSY pins need to either both be defined and routed for power saving, or both need to be disabled (-1 defaut definition) to mark this as intentional and forgoe power saving"
+        COMMAND ${CMAKE_COMMAND} -E false
+        VERBATIM
     )
 endif()
 

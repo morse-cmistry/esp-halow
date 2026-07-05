@@ -19,7 +19,7 @@
 #include "driver/spi_master.h"
 #include "driver/spi_common.h"
 
-static const char* TAG = "MMHaLow";
+static const char *TAG = "MMHaLow";
 
 /**
  * The number of bytes to send as part of @ref mmhal_wlan_send_training_seq for SD over SPI.
@@ -33,8 +33,10 @@ MM_STATIC_ASSERT((BYTE_TRAIN >= 10), "BYTE_TRAIN must be at least 10.");
 /** SPI hw interrupt handler. Must be set before enabling irq */
 static mmhal_irq_handler_t spi_irq_handler = NULL;
 
+#ifdef CONFIG_HALOW_PS_MODE
 /** busy interrupt handler. Must be set before enabling irq */
 static mmhal_irq_handler_t busy_irq_handler = NULL;
+#endif /* CONFIG_HALOW_PS_MODE */
 
 static spi_device_handle_t spi_handle;
 
@@ -43,19 +45,26 @@ static void wlan_hal_gpio_init(void)
     gpio_config_t io_conf = {};
     io_conf.intr_type = GPIO_INTR_DISABLE;
     io_conf.mode = GPIO_MODE_OUTPUT;
-    io_conf.pin_bit_mask = ((1ull << CONFIG_MM_WAKE) | (1ull << CONFIG_MM_SPI_CS));
+    io_conf.pin_bit_mask = 1ull << CONFIG_MM_SPI_CS;
+#ifdef CONFIG_HALOW_PS_MODE
+    io_conf.pin_bit_mask |= 1ull << CONFIG_MM_WAKE;
+#endif /* CONFIG_HALOW_PS_MODE */
     io_conf.pull_down_en = 0;
     io_conf.pull_up_en = 0;
     gpio_config(&io_conf);
 
+#ifdef CONFIG_HALOW_PS_MODE
     gpio_set_level(CONFIG_MM_WAKE, 0);
+#endif /* CONFIG_HALOW_PS_MODE */
     gpio_set_level(CONFIG_MM_SPI_CS, 0);
 
+#ifdef CONFIG_HALOW_PS_MODE
     io_conf.intr_type = GPIO_INTR_DISABLE;
     io_conf.mode = GPIO_MODE_INPUT;
     io_conf.pin_bit_mask = (1ull << CONFIG_MM_BUSY);
     io_conf.pull_down_en = 1;
     gpio_config(&io_conf);
+#endif /* CONFIG_HALOW_PS_MODE */
 
     io_conf.intr_type = GPIO_INTR_DISABLE;
     io_conf.mode = GPIO_MODE_INPUT;
@@ -252,8 +261,12 @@ void mmhal_wlan_deinit(void)
     /* Clean up any ISR handlers that have been added. These will be added again if the WLAN
      * interface is brought back up. */
     gpio_isr_handler_remove(CONFIG_MM_SPI_IRQ);
+#ifdef CONFIG_HALOW_PS_MODE
     gpio_isr_handler_remove(CONFIG_MM_BUSY);
+#endif /* CONFIG_HALOW_PS_MODE */
 }
+
+#ifdef CONFIG_HALOW_PS_MODE
 
 void mmhal_wlan_wake_assert(void)
 {
@@ -287,6 +300,33 @@ void mmhal_wlan_set_busy_irq_enabled(bool enabled)
         gpio_set_intr_type(CONFIG_MM_BUSY, GPIO_INTR_DISABLE);
     }
 }
+
+#else
+
+void mmhal_wlan_wake_assert(void)
+{
+}
+
+void mmhal_wlan_wake_deassert(void)
+{
+}
+
+bool mmhal_wlan_busy_is_asserted(void)
+{
+    return false;
+}
+
+void mmhal_wlan_register_busy_irq_handler(mmhal_irq_handler_t handler)
+{
+    (void)(handler);
+}
+
+void mmhal_wlan_set_busy_irq_enabled(bool enabled)
+{
+    (void)(enabled);
+}
+
+#endif /* CONFIG_HALOW_PS_MODE */
 
 /**
  * Generate a stable, device-unique MAC address based on the ESP32 MAC address. This address is not
