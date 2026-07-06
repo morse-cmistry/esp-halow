@@ -6,23 +6,31 @@ if(NOT (CONFIG_MM_CHIP_MM6108 OR CONFIG_MM_CHIP_MM8108) OR
     # lib def and no FATAL_ERROR to prevent blocking set-target and menuconfig
     add_library(morsefirmware INTERFACE)
     add_custom_target(mm_fw_config_error ALL
-        COMMAND ${CMAKE_COMMAND} -E echo
+        COMMAND ${CMAKE_COMMAND} -E echo cmake_echo_color --red --bold
             "ERROR: CONFIG_MM_CHIP and CONFIG_MM_BCF_FILE must be set. Set manually via menuconfig or use a sdkconfig.defaults found in managed_components/morsemicro__halow/configs"
         COMMAND ${CMAKE_COMMAND} -E false
     )
     return()
 endif()
 
-set(BCF_SEARCH_ROOT "${CMAKE_CURRENT_LIST_DIR}/morse-firmware/bcf")
-set(FW_SEARCH_ROOT  "${CMAKE_CURRENT_LIST_DIR}/morse-firmware/firmware")
+set(SDK_FW_ROOT "${MM_IOT_SDK}/framework/morsefirmware")
+
+set(BCF_SEARCH_ROOTS
+    "${SDK_FW_ROOT}"
+    "${CMAKE_CURRENT_LIST_DIR}/morse-firmware/bcf"
+)
+set(FW_SEARCH_ROOTS
+    "${SDK_FW_ROOT}"
+)
 
 if(CONFIG_MM_CHIP_MM6108)
-    set(FW_FILE "mm6108.bin")
+    set(FW_FILE "mm6108.mbin")
 elseif(CONFIG_MM_CHIP_MM8108)
-    set(FW_FILE "mm8108b2-rl.bin")
+    set(FW_FILE "mm8108b2-rl.mbin")
 endif()
 
-function(find_binary_blob OUT_VAR REQUESTED_NAME SEARCH_ROOT)
+# SEARCH_ROOTS is a CMake list (semicolon-separated) of directories to search in order.
+function(find_binary_blob OUT_VAR REQUESTED_NAME SEARCH_ROOTS)
     get_filename_component(req_dir  "${REQUESTED_NAME}" DIRECTORY)
     get_filename_component(req_name "${REQUESTED_NAME}" NAME)
     string(REGEX REPLACE "\\.(bin|mbin)$" "" base "${req_name}")
@@ -55,25 +63,29 @@ function(find_binary_blob OUT_VAR REQUESTED_NAME SEARCH_ROOT)
     endforeach()
 
     if(NOT found)
-        foreach(cand IN LISTS candidates)
-            file(GLOB_RECURSE matches LIST_DIRECTORIES false "${SEARCH_ROOT}/${cand}")
-            if(matches)
-                list(LENGTH matches n)
-                if(n GREATER 1)
-                    message(WARNING "Multiple matches for '${cand}' under ${SEARCH_ROOT}:\n"
-                                    "  ${matches}\n"
-                                    "Using the first one.")
+        foreach(search_root IN LISTS SEARCH_ROOTS)
+            foreach(cand IN LISTS candidates)
+                file(GLOB_RECURSE matches LIST_DIRECTORIES false "${search_root}/${cand}")
+                if(matches)
+                    list(LENGTH matches n)
+                    if(n GREATER 1)
+                        message(WARNING "Multiple matches for '${cand}' under ${search_root}:\n"
+                                        "  ${matches}\n"
+                                        "Using the first one.")
+                    endif()
+                    list(GET matches 0 found)
+                    break()
                 endif()
-                list(GET matches 0 found)
+            endforeach()
+            if(found)
                 break()
             endif()
         endforeach()
     endif()
 
     if(NOT found)
-        message(FATAL_ERROR "Could not resolve blob '${REQUESTED_NAME}'.\n"
-                            "Specify a path relative to the project root, or a filename present under:\n"
-                            " - ${SEARCH_ROOT}")
+        set(${OUT_VAR} "" PARENT_SCOPE)
+        return()
     endif()
 
     get_filename_component(found_ext "${found}" LAST_EXT)
@@ -90,8 +102,8 @@ function(find_binary_blob OUT_VAR REQUESTED_NAME SEARCH_ROOT)
         set(mbin "${CMAKE_CURRENT_BINARY_DIR}/${name}.mbin")
         add_custom_command(
             OUTPUT "${mbin}"
-            COMMAND ${python} ${CMAKE_CURRENT_LIST_DIR}/../mm-iot-sdk/framework/tools/buildsystem/convert-bin-to-mbin.py
-                -t 1,2:2 -o "${mbin}" "${found}"
+                COMMAND ${python} ${MM_IOT_SDK}/framework/tools/buildsystem/convert-bin-to-mbin.py
+                    -t 1,2:2 -o "${mbin}" "${found}"
             DEPENDS "${found}"
         )
         message(STATUS "Converting ${name} to mbin")
@@ -101,8 +113,29 @@ function(find_binary_blob OUT_VAR REQUESTED_NAME SEARCH_ROOT)
     set(${OUT_VAR} "${found}" PARENT_SCOPE)
 endfunction()
 
-find_binary_blob(BCF_MBIN "${CONFIG_MM_BCF_FILE}" "${BCF_SEARCH_ROOT}")
-find_binary_blob(FW_MBIN  "${FW_FILE}" "${FW_SEARCH_ROOT}")
+find_binary_blob(BCF_MBIN "${CONFIG_MM_BCF_FILE}" "${BCF_SEARCH_ROOTS}")
+find_binary_blob(FW_MBIN  "${FW_FILE}" "${FW_SEARCH_ROOTS}")
+
+if(NOT BCF_MBIN)
+    add_library(morsefirmware INTERFACE)
+    add_custom_target(_mm_bcf_missing_error ALL
+        COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --red --bold
+            "ERROR: BCF file not found. Check that the value of CONFIG_MM_BCF_FILE is a valid relative path to a BCF or that it exists in morse-firmware"
+        COMMAND ${CMAKE_COMMAND} -E false
+        VERBATIM
+    )
+    return()
+endif()
+if(NOT FW_MBIN)
+    add_library(morsefirmware INTERFACE)
+    add_custom_target(_mm_fw_missing_error ALL
+        COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --red --bold
+        "ERROR: Morse Micro firmware binary is missing. Refresh the morsemicro__halow/components/mm-iot-sdk submodule"
+        COMMAND ${CMAKE_COMMAND} -E false
+        VERBATIM
+    )
+    return()
+endif()
 
 add_library(morsefirmware STATIC)
 target_add_binary_data(morsefirmware "${FW_MBIN}"  BINARY RENAME_TO firmware_binary)
