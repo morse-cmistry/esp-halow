@@ -13,7 +13,7 @@ An ESP-IDF component that provides Wi-Fi HaLow (802.11ah) connectivity for ESP32
 
 Wi-Fi HaLow (IEEE 802.11ah) operates in the sub-1 GHz band, offering longer range and better obstacle penetration than standard Wi-Fi, at the cost of lower throughput. It is well suited for IoT applications.
 
-This component wraps the (Morse Micro IoT SDK `mm-iot-sdk`)[https://github.com/morsemicro/mm-iot-sdk] and exposes a concise API modelled on ESP-IDF's `esp_wifi` interface so it integrates naturally into existing ESP-IDF projects.
+This component wraps the [Morse Micro IoT SDK `mm-iot-sdk`](https://github.com/morsemicro/mm-iot-sdk) and exposes a concise API modelled on ESP-IDF's `esp_wifi` interface so it integrates naturally into existing ESP-IDF projects.
 
 ---
 
@@ -41,11 +41,11 @@ If you're not using a predefined board definition you'll need to define the foll
 | CONFIG_MM_SPI_MISO | int | Pin routed to spi's miso on the Morse Micro chip/module |
 | CONFIG_MM_SPI_CS | int | Pin routed to spi's cs on the Morse Micro chip/module |
 | CONFIG_MM_SPI_IRQ | int | Pin routed to the spi irq on the Morse Micro chip/module |
-| CONFIG_MM_BCF_FILE | string | String to the Board Configuration File for the Morse Micro chip/module. These are found in (morse-firmware)[https://github.com/morsemicro/morse-firmare] |
+| CONFIG_MM_BCF_FILE | string | String to the Board Configuration File for the Morse Micro chip/module. These are found in [morse-firmware](https://github.com/morsemicro/morse-firmware) |
 | CONFIG_MM_CHIP_MM6108 | bool | Set to true if your chip is a MM6108 |
 | CONFIG_MM_CHIP_MM8108 | bool | Set to true if your chip is a MM8108 |
 
-If you have any difficulties ascertaining these values, feel free to create a thread on the (community forum)[https://community.morsemicro.com/latest].
+If you have any difficulties ascertaining these values, feel free to create a thread on the [community forum](https://community.morsemicro.com/latest).
 
 ---
 
@@ -82,7 +82,7 @@ Run `idf.py menuconfig` and navigate to **Wi-Fi HaLow Connection Manager**:
 | `HALOW_COUNTRY_CODE` | `??` | Two-character country code (e.g. `US`, `AU`, `JP`) |
 | `HALOW_PS_MODE` | `n` | Enable power-save mode (requires BUSY/WAKE pins) |
 
-This is also where you would define your (hardware configuration values)[#hardware], if you're not using a predefinied (config)[./configs/README.md].
+This is also where you would define your [hardware configuration values](#hardware), if you're not using a predefinied [config](./configs/README.md).
 
 ### 3. Typical STA usage
 

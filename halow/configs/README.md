@@ -5,7 +5,9 @@ This is the home of [sdkconfig.defaults](https://docs.espressif.com/projects/idf
 # Usage
 
 If using the registry, the project's components need to be pulled before these configs can be used. This can be done before setting up the SDKCONFIG_DEFAULTS environment variable with:
-```idf.py reconfigure```
+```
+idf.py reconfigure
+```
 
 These can be passed in whilst setting the target to add pin, BCF, and chip type confgiurations to the project. For example these may be used during the set-target phase for setting up one of the HaLow examples as follows:
 
@@ -20,10 +22,11 @@ SDKCONFIG_DEFAULTS="sdkconfig.defaults;managed_components/morsemicro__halow/sdkc
 
 ```
 $env:SDKCONFIG_DEFAULTS = "sdkconfig.defaults;managed_components/morsemicro__halow/sdkconfig.defaults.seeed_xiao_esp32c3-seeed_xiao_mm6108" ; idf.py set-target esp32c3
+```
 
 ## Naming Convention
 
-The configs follow the following naming convention to aid in identifying the suitable configuraton
+The configs follow the following naming convention to aid in identifying the suitable configuration
 
 ```
 sdkconfig.defaults.[BOARD]-[HAT]
