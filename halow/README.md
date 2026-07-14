@@ -57,7 +57,7 @@ In your project's `idf_component.yml`:
 
 ```yaml
 dependencies:
-  morsemicro/mmhalow: "==2.11.2-esp32-1"
+  morsemicro/mmhalow: "==2.11.2-esp32-2"
 ```
 
 Or clone the repository and add `halow` as a local component:
