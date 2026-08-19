@@ -2,7 +2,7 @@
 # Copyright 2025-2026 Morse Micro
 # SPDX-License-Identifier: Apache-2.0
 
-set(src "mmhalow.c")
+set(src "mmhalow.cpp")
 
 set(inc ".")
 
